@@ -1,0 +1,78 @@
+template_name: perdix-ai-oc-tech
+width: 750
+height: 600
+background_color: "#3c3c3c"
+background_image: "templates/perdix.png"
+chroma_color: "#00FF00"  # bright green used where PNG is transparent
+
+default_label_font:
+  path: "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  size: 20
+  color: "#00BAEF"
+
+default_data_font:
+  path: "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  size: 42
+  color: "#FFFFFF"
+
+items:
+  # Top row
+  - field: depth
+    label: "DEPTH"
+    label_position: { x: 180, y: 200 }
+    data_position:  { x: 180, y: 220 }
+    precision: 1
+
+  - field: time
+    label: "TIME"
+    label_position: { x: 270, y: 200 }
+    data_position:  { x: 270, y: 220 }
+
+  - field: stop_depth
+    label: "STOP"
+    label_position: { x: 410, y: 200 }
+    data_position:  { x: 410, y: 220 }
+    precision: 0
+
+  - field: stop_time
+    label: "TIME"
+    label_position: { x: 470, y: 200 }
+    data_position:  { x: 470, y: 220 }
+    precision: 0
+
+  # Middle row
+  - field: pressure[0]
+    label: "T1"
+    label_position: { x: 180, y: 290 }
+    data_position:  { x: 180, y: 310 }
+    precision: 0
+
+  - field: temperature
+    label: "TEMP"
+    unit: "°C"
+    label_position: { x: 300, y: 290 }
+    data_position:  { x: 300, y: 310 }
+
+  - field: pressure[1]
+    label: "T2"
+    label_position: { x: 450, y: 290 }
+    data_position:  { x: 450, y: 310 }
+    precision: 0
+
+  # Bottom row
+  - field: gas
+    label: "O2/HE"
+    label_position: { x: 180, y: 380 }
+    data_position:  { x: 180, y: 400 }
+
+  - field: ndl
+    label: "NDL"
+    label_position: { x: 410, y: 380 }
+    data_position:  { x: 410, y: 400 }
+    precision: 0
+
+  - field: tts
+    label: "TTS"
+    label_position: { x: 470, y: 380 }
+    data_position:  { x: 470, y: 400 }
+    precision: 0

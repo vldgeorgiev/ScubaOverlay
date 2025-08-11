@@ -1,0 +1,113 @@
+import re
+import xml.etree.ElementTree as ET
+from abc import ABC, abstractmethod
+from typing import List, Dict, Any
+
+
+class DiveParser(ABC):
+    """Base class for dive log parsers."""
+
+    @abstractmethod
+    def parse(self, file_path: str) -> List[Dict[str, Any]]:
+        pass
+
+
+def _parse_time_to_seconds(t: str | None) -> int:
+    if t is None:
+        raise ValueError("Time string cannot be None")
+    t = t.replace(" min", "").strip()
+    parts = list(map(int, t.split(":")))
+    if len(parts) == 2:
+        return parts[0] * 60 + parts[1]
+    elif len(parts) == 3:
+        return parts[0] * 3600 + parts[1] * 60 + parts[2]
+    return 0
+
+
+class SubsurfaceParser(DiveParser):
+    """Parser for Subsurface (.ssrf) XML dive logs."""
+
+    def parse(self, file_path: str) -> List[Dict[str, Any]]:
+        tree = ET.parse(file_path)
+        root = tree.getroot()
+
+        dive = root.find(".//dive")
+        if dive is None:
+            return []
+
+        cylinders = dive.findall("cylinder")
+
+        divecomputer = dive.find("divecomputer")
+        if divecomputer is None:
+            raise ValueError("Dive computer data not found in the dive log.")
+
+        samples = divecomputer.findall("sample")
+        if not samples:
+            raise ValueError("No samples found in the dive log.")
+
+        profile_data: List[Dict[str, Any]] = []
+        last: Dict[str, Any] = {
+            "time": 0,
+            "depth": 0.0,
+            "ndl": 0,
+            "tts": 0,
+            "temperature": 0.0,
+            "pressure": [0.0] * len(cylinders),
+            "stop_depth": 0.0,
+            "stop_time": 0,
+            "gas": "21/00",  # TODO: derive from actual gas change events
+        }
+
+        for s in samples:
+            attrs = s.attrib
+            time_s = _parse_time_to_seconds(attrs.get("time"))
+
+            if "depth" in attrs:
+                last["depth"] = float(attrs["depth"].replace(" m", ""))
+            if "ndl" in attrs:
+                last["ndl"] = int(attrs["ndl"].replace(" min", "").split(":")[0])
+            if "tts" in attrs:
+                last["tts"] = int(attrs["tts"].replace(" min", "").split(":")[0])
+            if "temp" in attrs:
+                last["temperature"] = float(attrs["temp"].replace(" C", ""))
+            if "stopdepth" in attrs:
+                last["stop_depth"] = float(attrs["stopdepth"].replace(" m", ""))
+            if "stoptime" in attrs:
+                last["stop_time"] = int(attrs["stoptime"].replace(" min", "").split(":")[0])
+
+            for i in range(len(cylinders)):
+                key = f"pressure{i}"
+                if key in attrs:
+                    try:
+                        last["pressure"][i] = float(attrs[key].replace(" bar", ""))
+                    except ValueError:
+                        continue
+
+            profile_data.append({
+                "time": time_s,
+                "depth": last["depth"],
+                "ndl": last["ndl"],
+                "tts": last["tts"],
+                "temperature": last["temperature"],
+                "pressure": last["pressure"].copy(),
+                "gas": last["gas"],
+                "stop_depth": last["stop_depth"],
+                "stop_time": last["stop_time"],
+            })
+
+        print(f"Parsed {len(profile_data)} samples from dive log.")
+        # print("Sample data:", profile_data[:3])  # Print first 3 samples for debugging
+        return profile_data
+
+
+# Parser registry
+PARSER_REGISTRY = {
+    ".ssrf": SubsurfaceParser(),
+}
+
+
+def parse_dive_log(file_path: str) -> List[Dict[str, Any]]:
+    for ext, parser in PARSER_REGISTRY.items():
+        if file_path.lower().endswith(ext):
+            return parser.parse(file_path)
+    raise ValueError(f"No parser available for file: {file_path}")

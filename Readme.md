@@ -111,12 +111,27 @@ Popular editors:
 - **Final Cut Pro** — [Keyer effect](https://support.apple.com/guide/final-cut-pro/keyer-effect-ver5d3c6d45/mac)  
 - **Shotcut** (Free) — [Chroma Key tutorial](https://shotcut.org/tutorials/chroma-key/)  
 
-**Workflow:**
-1. Import **your dive video** and the **overlay.mp4** into the editor.  
-2. Place overlay above the main video in the timeline.  
-3. Apply **chroma key** to remove the green.  
-4. Adjust position/scale if needed.  
-5. Export the final composited video.  
+## 🧭 Aligning the overlay with your footage
+
+Getting the overlay to line up with your dive video is mostly about creating **clear reference points** and then applying a small time offset in your editor.
+
+### What to capture underwater (best practice)
+- At the **start of the dive**, briefly film your **dive computer screen** on your wrist.
+- If you **start/stop** recording during the dive, **begin each clip** with a 1–2 second shot of the computer.  
+  This gives you a reference for every clip.
+
+### How to read time
+- Some dive computers **show seconds**, while some don't. For example Shearwater Perdix ha sa progress bar above the minutes that indicates the seconds and can be used for estimation.  
+- The **depth** is a second reference: compare the depth in the shot of the computer with the one shown on the overlay. This is especially helpful when the depth changes fast.
+
+### Alignment workflow
+1. **Import** your main video and the **overlay** into your editor.
+2. Move to the frame where your video shows the **dive computer screen**. Read the **time** and **depth**.
+3. Shift the overlay track until the **time** and **depth** shown in it match the one above.
+4. Play back to verify the timing.
+
+**Expected accuracy:** ~**±10 seconds** with a single reference shot.  
+- On **flat, level sections** with minimal depth change, being **20–30 seconds off** usually **won’t be noticeable**.
 
 ---
 

@@ -1,6 +1,6 @@
 import argparse
-from parser import parse_dive_log
-from template import load_template
+from parser import parse_dive_log, DiveLogError, MultipleDivesError, NoDiveDataError, NoDiveComputerDataError, NoSamplesError, UnsupportedFormatError
+from template import load_template, TemplateError
 from overlay import generate_overlay_video, generate_test_template_image
 
 def main():
@@ -26,20 +26,41 @@ def main():
 
     # Test template shortcut
     if args.test_template:
-        template = load_template(args.template)
-        print("Generating test template image...")
-        generate_test_template_image(template, "test_template.png", units_override=units_override)
-        print("✅ Test template image saved as test_template.png")
+        try:
+            template = load_template(args.template)
+            print("Generating test template image...")
+            generate_test_template_image(template, "test_template.png", units_override=units_override)
+            print("✅ Test template image saved as test_template.png")
+        except TemplateError as e:
+            print(f"❌ Error: {e}")
+        except Exception as e:
+            print(f"❌ Error generating test template: {e}")
+            print("   Please check that all dependencies are installed.")
         return
 
     # Parse dive log
-    dive_data = parse_dive_log(args.log)
-    if not dive_data:
-        print("No dive data parsed. Exiting.")
+    try:
+        dive_data = parse_dive_log(args.log)
+        if not dive_data:
+            print("❌ No dive data parsed. Exiting.")
+            return
+    except DiveLogError as e:
+        print(f"❌ Error: {e}")
+        return
+    except Exception as e:
+        print(f"❌ Unexpected error while parsing dive log: {e}")
+        print("   Please check that the file exists and is a valid dive log.")
         return
 
     # Load template
-    template = load_template(args.template)
+    try:
+        template = load_template(args.template)
+    except TemplateError as e:
+        print(f"❌ Error: {e}")
+        return
+    except Exception as e:
+        print(f"❌ Error loading template: {e}")
+        return
 
     # Determine resolution from template (fallback defaults)
     width = int(template.get("width", 480))
@@ -54,8 +75,20 @@ def main():
     print(f" - Duration: {duration}s (fps={args.fps})")
     if units_override:
         print(f" - Units: {args.units} -> {units_override}")
-    generate_overlay_video(dive_data, template, args.output, resolution=resolution, duration=duration, fps=args.fps, units_override=units_override)
-    print(f"✅ Done. Overlay video saved to: {args.output}")
+
+    try:
+        generate_overlay_video(dive_data, template, args.output, resolution=resolution, duration=duration, fps=args.fps, units_override=units_override)
+        print(f"✅ Done. Overlay video saved to: {args.output}")
+    except Exception as e:
+        print(f"❌ Error generating overlay video: {e}")
+        print("   Please check that all dependencies are installed and the output path is writable.")
+        return
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n❌ Operation cancelled by user.")
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+        print("   Please check your inputs and try again.")

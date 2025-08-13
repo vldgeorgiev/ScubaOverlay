@@ -4,6 +4,42 @@ from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
 
+class DiveLogError(Exception):
+    """Base exception for dive log parsing errors."""
+    pass
+
+
+class MultipleDivesError(DiveLogError):
+    """Raised when a dive log contains multiple dives but only single dives are supported."""
+    def __init__(self, dive_count: int):
+        self.dive_count = dive_count
+        super().__init__(f"The dive log file contains {dive_count} dives. This application currently supports only single dive files. Please export or extract a single dive from your dive log software.")
+
+
+class NoDiveDataError(DiveLogError):
+    """Raised when no dive data is found in the dive log."""
+    def __init__(self):
+        super().__init__("No dive data found in the dive log file. Please check that the file is a valid dive log.")
+
+
+class NoDiveComputerDataError(DiveLogError):
+    """Raised when no dive computer data is found."""
+    def __init__(self):
+        super().__init__("No dive computer data found in the dive log. Please check that the dive log contains dive computer information.")
+
+
+class NoSamplesError(DiveLogError):
+    """Raised when no dive samples are found."""
+    def __init__(self):
+        super().__init__("No dive samples found in the dive log. Please check that the dive log contains dive profile data.")
+
+
+class UnsupportedFormatError(DiveLogError):
+    """Raised when the dive log format is not supported."""
+    def __init__(self, file_path: str):
+        super().__init__(f"Unsupported dive log format for file: {file_path}. Currently supported formats: .ssrf (Subsurface)")
+
+
 class DiveParser(ABC):
     """Base class for dive log parsers."""
 
@@ -31,19 +67,22 @@ class SubsurfaceParser(DiveParser):
         tree = ET.parse(file_path)
         root = tree.getroot()
 
-        dive = root.find(".//dive")
-        if dive is None:
-            return []
+        dives = root.findall(".//dives/dive")
+        if not dives:
+            raise NoDiveDataError()
+        if len(dives) > 1:
+            raise MultipleDivesError(len(dives))
+        dive = dives[0]
 
         cylinders = dive.findall("cylinder")
 
         divecomputer = dive.find("divecomputer")
         if divecomputer is None:
-            raise ValueError("Dive computer data not found in the dive log.")
+            raise NoDiveComputerDataError()
 
         samples = divecomputer.findall("sample")
         if not samples:
-            raise ValueError("No samples found in the dive log.")
+            raise NoSamplesError()
 
         profile_data: List[Dict[str, Any]] = []
         last: Dict[str, Any] = {
@@ -110,4 +149,4 @@ def parse_dive_log(file_path: str) -> List[Dict[str, Any]]:
     for ext, parser in PARSER_REGISTRY.items():
         if file_path.lower().endswith(ext):
             return parser.parse(file_path)
-    raise ValueError(f"No parser available for file: {file_path}")
+    raise UnsupportedFormatError(file_path)

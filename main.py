@@ -1,5 +1,5 @@
 import argparse
-from parser import parse_dive_log, DiveLogError, MultipleDivesError, NoDiveDataError, NoDiveComputerDataError, NoSamplesError, UnsupportedFormatError
+from parser import parse_dive_log, DiveLogError
 from template import load_template, TemplateError
 from overlay import generate_overlay_video, generate_test_template_image
 
@@ -40,8 +40,8 @@ def main():
 
     # Parse dive log
     try:
-        dive_data = parse_dive_log(args.log)
-        if not dive_data:
+        dive_samples = parse_dive_log(args.log)
+        if not dive_samples:
             print("❌ No dive data parsed. Exiting.")
             return
     except DiveLogError as e:
@@ -68,7 +68,7 @@ def main():
     resolution = (width, height)
 
     # Duration: user override or derive from last sample time
-    duration = args.duration if args.duration is not None else int(dive_data[-1]["time"]) + 1
+    duration = args.duration if args.duration is not None else int(dive_samples[-1].time) + 1
 
     print(f"Generating overlay video: {args.output}")
     print(f" - Resolution: {resolution[0]}x{resolution[1]}")
@@ -77,7 +77,7 @@ def main():
         print(f" - Units: {args.units} -> {units_override}")
 
     try:
-        generate_overlay_video(dive_data, template, args.output, resolution=resolution, duration=duration, fps=args.fps, units_override=units_override)
+        generate_overlay_video(dive_samples, template, args.output, resolution=resolution, duration=duration, fps=args.fps, units_override=units_override)
         print(f"✅ Done. Overlay video saved to: {args.output}")
     except Exception as e:
         print(f"❌ Error generating overlay video: {e}")

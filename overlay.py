@@ -2,6 +2,7 @@ import cv2
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 from typing import Dict, Any, List, Optional, Callable
+from parser import DiveSample
 
 # Simple font cache to avoid reloading fonts repeatedly
 _FONT_CACHE: Dict[tuple[str, int], ImageFont.FreeTypeFont] = {}
@@ -172,7 +173,7 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
     return _CompiledTemplate(base, data_items, frame_size, units_map)
 
 
-def _render_dynamic_frame(data: Dict[str, Any], compiled: _CompiledTemplate) -> np.ndarray:
+def _render_dynamic_frame(data: DiveSample, compiled: _CompiledTemplate) -> np.ndarray:
     img = compiled.base_img.copy()
     draw = ImageDraw.Draw(img)
     draw_text = draw.text  # local binding
@@ -201,10 +202,10 @@ def _render_dynamic_frame(data: Dict[str, Any], compiled: _CompiledTemplate) -> 
     return np.array(img)
 
 
-def extract_value_from_data(field: str, data: Dict[str, Any]):
+def extract_value_from_data(field: str, data: DiveSample):
     # time formatting
     if field == "time":
-        t = data.get("time")
+        t = data.time
         if t is None:
             return None
         minutes = int(t) // 60
@@ -214,16 +215,16 @@ def extract_value_from_data(field: str, data: Dict[str, Any]):
     if field.startswith("pressure["):
         try:
             index = int(field[9:-1])
-            pressures = data.get("pressure") or []
+            pressures = data.pressure or []
             return pressures[index] if index < len(pressures) else None
         except Exception:
             return None
     if field.startswith("ppo2["):
         return "N/A"  # placeholder for future implementation
-    return data.get(field)
+    return getattr(data, field, None)
 
 
-def generate_overlay_video(dive_data: List[Dict[str, Any]], template: Dict[str, Any], output_path: str, resolution=(480, 280), duration=None, fps=30, units_override: Optional[Dict[str, str]] = None):
+def generate_overlay_video(dive_samples: List[DiveSample], template: Dict[str, Any], output_path: str, resolution=(480, 280), duration=None, fps=30, units_override: Optional[Dict[str, str]] = None):
     fourcc_func = getattr(cv2, "VideoWriter_fourcc", None)
     fourcc = fourcc_func(*'mp4v') if fourcc_func else 0
     out = cv2.VideoWriter(output_path, fourcc, fps, resolution)
@@ -234,7 +235,7 @@ def generate_overlay_video(dive_data: List[Dict[str, Any]], template: Dict[str, 
     if duration is not None:
         total_seconds = int(duration)
     else:
-        total_seconds = int(dive_data[-1]["time"]) + 1 if dive_data else 0
+        total_seconds = int(dive_samples[-1].time) + 1 if dive_samples else 0
 
     # Pointer to current sample for O(1) lookup per second
     idx = 0
@@ -244,9 +245,9 @@ def generate_overlay_video(dive_data: List[Dict[str, Any]], template: Dict[str, 
 
     for sec in range(total_seconds):
         # Advance sample pointer to latest sample <= current second
-        while idx + 1 < len(dive_data) and dive_data[idx + 1]["time"] <= sec:
+        while idx + 1 < len(dive_samples) and dive_samples[idx + 1].time <= sec:
             idx += 1
-        sample = dive_data[idx] if dive_data else None
+        sample = dive_samples[idx] if dive_samples else None
         if sample is None:
             break
 
@@ -266,17 +267,18 @@ def generate_overlay_video(dive_data: List[Dict[str, Any]], template: Dict[str, 
 def generate_test_template_image(template: Dict[str, Any], output_path: str, units_override: Optional[Dict[str, str]] = None):
     frame_size = (int(template.get("width", 0)), int(template.get("height", 0)))
 
-    dummy_data = {
-        "depth": 30.0,
-        "time": 8000, # 8000 seconds = 2 hours, 13 minutes, 20 seconds
-        "ndl": 15,
-        "tts": 10,
-        "temperature": 22.5,
-        "pressure": [200.15, 180.4, 150.50, 120.95],
-        "stop_depth": 6.0,
-        "stop_time": 3,
-        "gas": "21/35",
-    }
+    dummy_data = DiveSample(
+        depth=30.0,
+        time=8000,  # 8000 seconds = 2 hours, 13 minutes, 20 seconds
+        ndl=15,
+        tts=10,
+        temperature=22.5,
+        pressure=[200.15, 180.4, 150.50, 120.95],
+        stop_depth=6.0,
+        stop_time=3,
+        fractionO2=0.21,
+        fractionHe=0.0,
+    )
 
     compiled = _compile_template(template, frame_size, units_override)
     img_array = _render_dynamic_frame(dummy_data, compiled)

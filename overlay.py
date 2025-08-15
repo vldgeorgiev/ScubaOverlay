@@ -81,12 +81,11 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
                     tmp = Image.new("RGBA", frame_size, chroma_rgb + (255,))
                     tmp.paste(fg_resized, (pad_x, 0), fg_resized)
                     fg = tmp
-                if fg.size != frame_size:
-                    fg = fg.resize(frame_size, Image.Resampling.LANCZOS)
-            # Paste foreground preserving its alpha (transparent pixels remain chroma base)
+
+            # Overlay PNG onto chroma base, preserving alpha
             base.paste(fg, (0, 0), fg)
-        except Exception as e:
-            print(f"Warning: failed to load background_image '{background_image_path}': {e}. Falling back to background_color.")
+        except Exception:
+            # If background image loading fails, fall back to solid color
             bg_color = hex_to_rgb(template.get("background_color", "#000000"))
             base = Image.new("RGBA", frame_size, bg_color + (255,))
     else:
@@ -103,45 +102,65 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
     data_items: List[Dict[str, Any]] = []
 
     for item in template.get("items", []):
-        field = item.get("field")
-        if not field:
-            continue
+        item_type = item.get("type", "data")  # Default to "data" for backward compatibility
 
-        unit = item.get("unit", "")
-        label = item.get("label", "")
-        fallback_value = item.get("fallback", "N/A")
+        if item_type == "text":
+            # Static text item
+            text = item.get("text", "")
+            pos = item.get("position", {"x": 0, "y": 0})
+            x, y = pos.get("x", 0), pos.get("y", 0)
 
-        # Label (static): draw onto base
-        label_pos = item.get("label_position") or item.get("position", {"x": 0, "y": 0})
-        label_x, label_y = label_pos.get("x", 0), label_pos.get("y", 0)
-        label_font_size = item.get("label_font", {}).get("size", default_label_font.get("size", 22))
-        label_font_path = default_label_font.get("path") or fallback_path
-        label_font = _get_font(label_font_path, label_font_size)
-        label_color = hex_to_rgb(item.get("label_font", {}).get("color", default_label_font.get("color", "#FFFFFF")))
-        if label:
-            draw.text((label_x, label_y), label, font=label_font, fill=label_color)
+            # Use label font as default for text items
+            font_size = item.get("font", {}).get("size", default_label_font.get("size", 22))
+            font_path = item.get("font", {}).get("path", default_label_font.get("path", fallback_path))
+            font_color = hex_to_rgb(item.get("font", {}).get("color", default_label_font.get("color", "#FFFFFF")))
 
-        # Data (dynamic): store info for fast drawing later
-        data_pos = item.get("data_position")
-        data_x, data_y = data_pos.get("x", 0), data_pos.get("y", 0)
-        data_font_size = item.get("data_font", {}).get("size", default_data_font.get("size", 22))
-        data_font_path = default_data_font.get("path") or fallback_path
-        data_font = _get_font(data_font_path, data_font_size)
-        data_color = hex_to_rgb(item.get("data_color", item.get("data_font", {}).get("color", default_data_font.get("color", "#FFFFFF"))))
-        precision = item.get("precision")
+            font = _get_font(font_path, font_size)
+            draw.text((x, y), text, font=font, fill=font_color)
 
-        data_items.append(
-            {
+        elif item_type == "data":
+            # Data field item
+            field = item.get("field")
+            if not field:
+                continue  # Skip items without field
+
+            unit = item.get("unit", "")
+            label = item.get("label", "")
+            fallback_value = item.get("fallback", "N/A")
+
+            # Draw label (static) onto base
+            label_pos = item.get("label_position", {"x": 0, "y": 0})
+            label_x, label_y = label_pos.get("x", 0), label_pos.get("y", 0)
+            label_font_size = item.get("label_font", {}).get("size", default_label_font.get("size", 22))
+            label_font_path = item.get("label_font", {}).get("path", default_label_font.get("path", fallback_path))
+            label_font = _get_font(label_font_path, label_font_size)
+            label_color = hex_to_rgb(item.get("label_font", {}).get("color", default_label_font.get("color", "#FFFFFF")))
+
+            if label:
+                draw.text((label_x, label_y), label, font=label_font, fill=label_color)
+
+            # Prepare data (dynamic) rendering info
+            data_pos = item.get("data_position")
+            if not data_pos:
+                continue  # Skip if no data position specified
+
+            data_x, data_y = data_pos.get("x", 0), data_pos.get("y", 0)
+            data_font_size = item.get("data_font", {}).get("size", default_data_font.get("size", 22))
+            data_font_path = item.get("data_font", {}).get("path", default_data_font.get("path", fallback_path))
+            data_font = _get_font(data_font_path, data_font_size)
+            data_color = hex_to_rgb(item.get("data_color", item.get("data_font", {}).get("color", default_data_font.get("color", "#FFFFFF"))))
+            precision = item.get("precision")
+
+            data_items.append({
                 "field": field,
-                "unit": unit,  # original label (may be overridden by global units)
+                "unit": unit,
                 "x": data_x,
                 "y": data_y,
                 "font": data_font,
                 "color": data_color,
                 "fallback": fallback_value,
                 "precision": precision,
-            }
-        )
+            })
 
     units_map = template.get("units", {}).copy()
     if units_override:
@@ -206,8 +225,6 @@ def extract_value_from_data(field: str, data: DiveSample):
     # time formatting
     if field == "time":
         t = data.time
-        if t is None:
-            return None
         minutes = int(t) // 60
         seconds = int(t) % 60
         return f"{minutes}:{seconds:02d}"
@@ -215,13 +232,16 @@ def extract_value_from_data(field: str, data: DiveSample):
     if field.startswith("pressure["):
         try:
             index = int(field[9:-1])
-            pressures = data.pressure or []
-            return pressures[index] if index < len(pressures) else None
+            pressures = data.pressure
+            if pressures is None or index >= len(pressures):
+                return None
+            return pressures[index]
         except Exception:
             return None
-    if field.startswith("ppo2["):
-        return "N/A"  # placeholder for future implementation
-    return getattr(data, field, None)
+
+    # Handle all other fields - use getattr with None default for optional fields
+    value = getattr(data, field, None)
+    return value
 
 
 def generate_overlay_video(dive_samples: List[DiveSample], template: Dict[str, Any], output_path: str, resolution=(480, 280), duration=None, fps=30, units_override: Optional[Dict[str, str]] = None):

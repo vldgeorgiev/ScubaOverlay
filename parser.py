@@ -1,8 +1,9 @@
 import re
 import xml.etree.ElementTree as ET
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any
-from dataclasses import dataclass
+from typing import List, Dict, Any, Optional
+from dataclasses import dataclass, field
+import copy
 
 
 @dataclass
@@ -10,16 +11,17 @@ class DiveSample:
     """Represents a single dive sample with all dive computer data."""
     time: int  # Time in seconds from dive start
     depth: float  # Depth in meters
-    ndl: int  # No Decompression Limit in minutes
-    tts: int  # Time to Surface in minutes
-    stop_depth: float  # Decompression stop depth in meters
-    stop_time: int  # Decompression stop time in minutes
-    temperature: float  # Water temperature in Celsius
-    pressure: List[float]  # Tank pressures in bar (list for multiple tanks)
-    fractionO2: float = 0.21  # Fraction of oxygen in the gas mix (default is air)
-    fractionHe: float = 0.0  # Fraction of helium in the gas mix (default is air)
-    sac: float = 0.0  # Surface Air Consumption rate in liters per minute
-    gtr: int = 0  # Gas Time Remaining in seconds
+    ndl: Optional[int] = None  # No Decompression Limit in minutes
+    tts: Optional[int] = None  # Time to Surface in minutes
+    stop_depth: Optional[float] = 0  # Decompression stop depth in meters
+    stop_time: Optional[int] = 0  # Decompression stop time in minutes
+    temperature: Optional[float] = None  # Water temperature in Celsius
+    pressure: List[Optional[float]] = field(default_factory=list)  # Tank pressures in bar
+    fractionO2: Optional[float] = None  # Fraction of oxygen in the gas mix
+    fractionHe: Optional[float] = None  # Fraction of helium in the gas mix
+    sac: Optional[float] = None  # Surface Air Consumption rate in liters per minute
+    gtr: Optional[int] = None  # Gas Time Remaining in seconds
+
 
 class DiveLogError(Exception):
     """Base exception for dive log parsing errors."""
@@ -107,19 +109,18 @@ class SubsurfaceParser(DiveParser):
         last_values: DiveSample = DiveSample(
             time=0,
             depth=0.0,
-            ndl=0,
-            tts=0,
-            stop_depth=0.0,
-            stop_time=0,
-            temperature=0.0,
-            pressure=[0.0] * len(cylinders),
+            ndl=99, # Start value for Shearwater
         )
+        # Initialize pressures list length based on cylinders (if any)
+        if cylinders:
+            last_values.pressure = [None] * len(cylinders)
 
         for s in samples:
             attrs = s.attrib
             time_s = _parse_time_to_seconds(attrs.get("time"))
 
             # Update last known values only if present in this sample
+            last_values.time = time_s
             if "depth" in attrs:
                 last_values.depth = float(attrs["depth"].replace(" m", ""))
             if "ndl" in attrs:
@@ -142,22 +143,11 @@ class SubsurfaceParser(DiveParser):
                     except ValueError:
                         continue
 
-            # Create dive sample with current values
-            sample = DiveSample(
-                time=time_s,
-                depth=last_values.depth,
-                ndl=last_values.ndl,
-                tts=last_values.tts,
-                temperature=last_values.temperature,
-                pressure=last_values.pressure.copy(),
-                fractionO2=last_values.fractionO2,
-                stop_depth=last_values.stop_depth,
-                stop_time=last_values.stop_time,
-            )
-
-            profile_data.append(sample)
+            # Append a full snapshot of the current state
+            profile_data.append(copy.deepcopy(last_values))
 
         print(f"Parsed {len(profile_data)} samples from dive log.")
+        print("Sample data:", profile_data[:3])  # Print first 3 samples for debugging
         return profile_data
 
 

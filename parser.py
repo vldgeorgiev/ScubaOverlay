@@ -38,20 +38,8 @@ class MultipleDivesError(DiveLogError):
 
 class NoDiveDataError(DiveLogError):
     """Raised when no dive data is found in the dive log."""
-    def __init__(self):
-        super().__init__("No dive data found in the dive log file. Please check that the file is a valid dive log.")
-
-
-class NoDiveComputerDataError(DiveLogError):
-    """Raised when no dive computer data is found."""
-    def __init__(self):
-        super().__init__("No dive computer data found in the dive log. Please check that the dive log contains dive computer information.")
-
-
-class NoSamplesError(DiveLogError):
-    """Raised when no dive samples are found."""
-    def __init__(self):
-        super().__init__("No dive samples found in the dive log. Please check that the dive log contains dive profile data.")
+    def __init__(self, message: str = "No dive data found in the dive log file. Please check that the file is a valid dive log."):
+        super().__init__(message)
 
 
 class UnsupportedFormatError(DiveLogError):
@@ -70,7 +58,7 @@ class DiveParser(ABC):
 
 def _parse_time_to_seconds(t: str | None) -> int:
     if t is None:
-        raise ValueError("Time string cannot be None")
+        raise NoDiveDataError("Time string cannot be None")
     t = t.replace(" min", "").strip()
     parts = list(map(int, t.split(":")))
     if len(parts) == 2:
@@ -98,11 +86,11 @@ class SubsurfaceParser(DiveParser):
 
         divecomputer = dive.find("divecomputer")
         if divecomputer is None:
-            raise NoDiveComputerDataError()
+            raise NoDiveDataError("No dive computer data found in the dive log. Please check that the dive log contains dive computer information.")
 
         samples = divecomputer.findall("sample")
         if not samples:
-            raise NoSamplesError()
+            raise NoDiveDataError("No dive samples found in the dive log. Please check that the dive log contains dive profile data.")
 
         profile_data: List[DiveSample] = []
 
@@ -174,7 +162,7 @@ class ShearwaterParser(DiveParser):
         # Find dive log records
         dive_records = root.findall(".//diveLogRecords/diveLogRecord")
         if not dive_records:
-            raise NoSamplesError()
+            raise NoDiveDataError("No dive samples found in the dive log. Please check that the dive log contains dive profile data.")
 
         profile_data: List[DiveSample] = []
 
@@ -189,7 +177,7 @@ class ShearwaterParser(DiveParser):
         for record in dive_records:
             time_ms = record.find("currentTime")
             if time_ms is None or time_ms.text is None:
-                raise NoDiveDataError("No current time found in dive record.")
+                raise NoDiveDataError("Dive record missing required currentTime field")
             last_values.time = int(time_ms.text) // 1000
 
             depth_elem = record.find("currentDepth")

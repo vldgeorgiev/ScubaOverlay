@@ -39,5 +39,5 @@ dist/
 *.sublime-workspace
 
 samples
-/test_template.png
-/output_overlay.mp4
+/*.png
+*.mp4

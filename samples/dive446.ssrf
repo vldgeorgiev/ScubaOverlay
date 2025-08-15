@@ -5,18 +5,10 @@
 <fingerprint model='fa7c4d65' serial='00001492' deviceid='710461cd' diveid='2b995563' data='591104f346c2b242'/>
 </settings>
 <divesites>
-<site uuid='b1e7c157' name='Пещера Големият извор, Кипилово' gps='42.880750 26.267130'>
-  <geo cat='2' origin='0' value='Bulgaria'/>
-  <geo cat='3' origin='0' value='Sliven'/>
-  <geo cat='5' origin='0' value='Tsutsumanite'/>
-</site>
+<site></site>
 </divesites>
 <dives>
 <dive number='446' sac='12.127 l/min' otu='5' cns='2%' tags='sidemount, cave, fresh' divesiteid='b1e7c157' date='2025-08-02' time='11:42:06' duration='45:00 min'>
-  <buddy>Уинки</buddy>
-  <notes>Суоер условия. Видимост 10+ м, и старото въже беше в идеално състояние.
-Доста бързо влезнахме, за 15 минути с мотаенето бяхме на -40м. Старото въже е до там. Галерията до залата с въздушния джоб е около 100м хоризонтала с глинесто дъно и доста образувания за връзване по стените. След залата е наклон 30-ина градуса с пясъчно дъно.
-На връщане извадихме стария кабел.</notes>
   <cylinder size='12.0 l' workpressure='232.0 bar' description='12ℓ 232 bar' end='144.0 bar' depth='67.961 m' />
   <cylinder size='12.0 l' workpressure='232.0 bar' description='12ℓ 232 bar' end='145.0 bar' use='not used' depth='67.961 m' />
   <weightsystem weight='2.0 kg' description='shoulder' />

@@ -73,7 +73,7 @@ items:
     font: { size: 42, color: "#FFFFFF" }
 
   - type: data
-    field: gas
+    compute: "{fractionO2:02%}/{fractionHe:02%}"
     label: "O2/HE"
     label_position: { x: 260, y: 380 }
     data_position:  { x: 260, y: 400 }

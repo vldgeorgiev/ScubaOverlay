@@ -121,8 +121,10 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
         elif item_type == "data":
             # Data field item
             field = item.get("field")
-            if not field:
-                continue  # Skip items without field
+            compute_expr = item.get("compute")
+
+            if not field and not compute_expr:
+                continue  # Skip items without field or compute expression
 
             unit = item.get("unit", "")
             label = item.get("label", "")
@@ -153,6 +155,7 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
 
             data_items.append({
                 "field": field,
+                "compute": compute_expr,
                 "unit": unit,
                 "x": data_x,
                 "y": data_y,
@@ -169,6 +172,13 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
     # Precompute converters & final unit labels
     for it in data_items:
         field_name = it["field"]
+
+        # Skip unit conversion for computed fields
+        if field_name is None:
+            it["_convert"] = None
+            it["_final_unit"] = it.get("unit", "")
+            continue
+
         if field_name.startswith("pressure["):
             quantity = "pressure"
         elif field_name in ("depth", "stop_depth"):
@@ -197,7 +207,12 @@ def _render_dynamic_frame(data: DiveSample, compiled: _CompiledTemplate) -> np.n
     draw = ImageDraw.Draw(img)
     draw_text = draw.text  # local binding
     for it in compiled.data_items:
-        value = extract_value_from_data(it["field"], data)
+        # Check if this is a computed field or regular field
+        if it.get("compute"):
+            value = evaluate_compute_expression(it["compute"], data)
+        else:
+            value = extract_value_from_data(it["field"], data)
+
         if value is None:
             value = it["fallback"]
         conv = it.get("_convert")
@@ -222,13 +237,14 @@ def _render_dynamic_frame(data: DiveSample, compiled: _CompiledTemplate) -> np.n
 
 
 def extract_value_from_data(field: str, data: DiveSample):
-    # time formatting
+    # time formatting (required field, should never be None)
     if field == "time":
         t = data.time
         minutes = int(t) // 60
         seconds = int(t) % 60
         return f"{minutes}:{seconds:02d}"
-    # pressure[i]
+
+    # pressure[i] - handle optional pressure list
     if field.startswith("pressure["):
         try:
             index = int(field[9:-1])
@@ -242,6 +258,62 @@ def extract_value_from_data(field: str, data: DiveSample):
     # Handle all other fields - use getattr with None default for optional fields
     value = getattr(data, field, None)
     return value
+
+
+def evaluate_compute_expression(compute_expr: str, data: DiveSample) -> Optional[str]:
+    """
+    Evaluate a simple compute expression using template substitution.
+
+    Supported syntax:
+    - {field} - Simple field substitution
+    - {field:02%} - Field as percentage with 2 digits (fractionO2 -> "21")
+    - {field:1f} - Field with 1 decimal place
+    - {field:0f} - Field as integer
+
+    Example: "{fractionO2:02%}/{fractionHe:02%}" -> "32/05"
+    """
+    import re
+
+    # Find all field references like {field} or {field:format}
+    pattern = r'\{([^}:]+)(?::([^}]+))?\}'
+    matches = re.findall(pattern, compute_expr)
+
+    result = compute_expr
+    for field_name, format_spec in matches:
+        # Get the field value
+        field_value = getattr(data, field_name, None)
+
+        if field_value is None:
+            return None  # If any required field is missing, return None
+
+        # Apply formatting
+        if format_spec:
+            if format_spec.endswith('%'):
+                # Percentage formatting (fraction to percentage)
+                digits = format_spec[:-1]
+                try:
+                    precision = int(digits) if digits else 2
+                    formatted_value = f"{int(field_value * 100):0{precision}d}"
+                except (ValueError, TypeError):
+                    formatted_value = str(field_value)
+            elif 'f' in format_spec:
+                # Float formatting
+                try:
+                    formatted_value = f"{field_value:{format_spec}}"
+                except (ValueError, TypeError):
+                    formatted_value = str(field_value)
+            else:
+                # Default formatting
+                formatted_value = f"{field_value:{format_spec}}"
+        else:
+            # No formatting specified
+            formatted_value = str(field_value)
+
+        # Replace in the result string
+        old_pattern = '{' + field_name + (':' + format_spec if format_spec else '') + '}'
+        result = result.replace(old_pattern, formatted_value)
+
+    return result
 
 
 def generate_overlay_video(dive_samples: List[DiveSample], template: Dict[str, Any], output_path: str, resolution=(480, 280), duration=None, fps=30, units_override: Optional[Dict[str, str]] = None):
@@ -296,8 +368,8 @@ def generate_test_template_image(template: Dict[str, Any], output_path: str, uni
         pressure=[200.15, 180.4, 150.50, 120.95],
         stop_depth=6.0,
         stop_time=3,
-        fractionO2=0.21,
-        fractionHe=0.0,
+        fractionO2=0.32,  # 32% oxygen
+        fractionHe=0.05,  # 5% helium (Trimix 32/05)
     )
 
     compiled = _compile_template(template, frame_size, units_override)

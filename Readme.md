@@ -21,10 +21,12 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 
 ## ✨ Features
 
+- **Multiple dive log formats** — Subsurface (.ssrf) and Shearwater XML
 - **Flexible backgrounds** — solid color or PNG with transparency  
 - **Chroma key–friendly** background color (default bright green `#00FF00`)  
 - **Per-item positioning** — labels and values placed independently  
 - **Rich data support** — depth, time, NDL, TTS, temperature, stop depth/time, gas, pressure[n]  
+- **Computed fields** — combine multiple data fields with custom formatting
 - **Automatic unit conversion** — metric ↔ imperial  
 - **Per-item numeric precision** — e.g. 1 decimal for depth, integer for pressures  
 - **Font customization** — size, color, style (bold/italic) from any font file  
@@ -140,7 +142,7 @@ Getting the overlay to line up with your dive video is mostly about creating **c
 | Option          | Description |
 |-----------------|-------------|
 | `--template`    | Path to YAML template (required) |
-| `--log`         | Dive log file (.ssrf) |
+| `--log`         | Dive log file (.ssrf or .xml) |
 | `--output`      | Output MP4 filename (default: `output_overlay.mp4`) |
 | `--duration`    | Force duration in seconds |
 | `--fps`         | Frames per second (default: 10) |
@@ -151,24 +153,25 @@ Getting the overlay to line up with your dive video is mostly about creating **c
 
 ## 🖌 Creating & Editing Templates
 
-Templates are YAML files defining:
-- **Background** (solid or PNG)
-- **Default fonts**
-- **Data items** (field, label, positions, precision, colors)
+Templates are YAML files that define the visual layout and data fields for your overlay. The template system supports:
 
-Example:
-```yaml
-- field: depth
-  label: "DEPTH"
-  label_position: { x: 180, y: 200 }
-  data_position:  { x: 180, y: 220 }
-  precision: 1
-```
-Run:
+- **Multiple backgrounds** (solid color, PNG images, chroma key transparency)
+- **Custom fonts** with size, color, and positioning control
+- **Static text** and **dynamic dive data** items
+- **Computed fields** that combine multiple data sources
+- **Unit conversion** (metric ↔ imperial)
+- **Precision control** for numeric displays
+
+For **complete template documentation** with examples and field reference, see:  
+📖 **[Template System Guide](docs/template-guide.md)**
+
+### Quick Template Testing
+
 ```bash
 python main.py --template your_template.yaml --test-template
 ```
-until the layout looks right.
+
+This generates a single PNG preview so you can iterate on your layout quickly.
 
 ---
 
@@ -182,7 +185,7 @@ until the layout looks right.
 
 ## 🛤 Roadmap
 
-- Support for Shearwater XML, Garmin, and other formats  
+- Support for Garmin and other dive computer formats  
 - PPO2 calculation  
 - Dive profile graph overlay  
 

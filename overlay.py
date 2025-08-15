@@ -368,8 +368,8 @@ def generate_test_template_image(template: Dict[str, Any], output_path: str, uni
         pressure=[200.15, 180.4, 150.50, 120.95],
         stop_depth=6.0,
         stop_time=3,
-        fractionO2=0.32,  # 32% oxygen
-        fractionHe=0.05,  # 5% helium (Trimix 32/05)
+        fractionO2=0.21,
+        fractionHe=0.29,
     )
 
     compiled = _compile_template(template, frame_size, units_override)

@@ -21,7 +21,8 @@ class DiveSample:
     fractionHe: Optional[float] = None  # Fraction of helium in the gas mix
     sac: Optional[float] = None  # Surface Air Consumption rate in liters per minute
     gtr: Optional[int] = None  # Gas Time Remaining in seconds
-
+    ppo2: Optional[float] = None  # Partial Pressure of Oxygen in bar
+    cns: Optional[int] = None  # Central Nervous System Oxygen Toxicity in %
 
 class DiveLogError(Exception):
     """Base exception for dive log parsing errors."""
@@ -56,7 +57,7 @@ class NoSamplesError(DiveLogError):
 class UnsupportedFormatError(DiveLogError):
     """Raised when the dive log format is not supported."""
     def __init__(self, file_path: str):
-        super().__init__(f"Unsupported dive log format for file: {file_path}. Currently supported formats: .ssrf (Subsurface)")
+        super().__init__(f"Unsupported dive log format for file: {file_path}. Currently supported formats: .ssrf (Subsurface), .xml (Shearwater)")
 
 
 class DiveParser(ABC):
@@ -110,6 +111,8 @@ class SubsurfaceParser(DiveParser):
             time=0,
             depth=0.0,
             ndl=99, # Start value for Shearwater
+            cns=0, # TODO implement
+            ppo2=None, # TODO implement
         )
         # Initialize pressures list length based on cylinders (if any)
         if cylinders:
@@ -151,9 +154,129 @@ class SubsurfaceParser(DiveParser):
         return profile_data
 
 
+class ShearwaterParser(DiveParser):
+    """Parser for Shearwater XML dive logs."""
+
+    def parse(self, file_path: str) -> List[DiveSample]:
+        # Handle encoding issues with Shearwater XML files
+        try:
+            tree = ET.parse(file_path)
+        except ET.ParseError:
+            # Try reading with UTF-8 and fix encoding declaration
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            # Replace incorrect encoding declaration
+            content = content.replace('encoding="utf-16"', 'encoding="utf-8"')
+            tree = ET.fromstring(content)
+
+        root = tree if isinstance(tree, ET.Element) else tree.getroot()
+
+        # Find dive log records
+        dive_records = root.findall(".//diveLogRecords/diveLogRecord")
+        if not dive_records:
+            raise NoSamplesError()
+
+        profile_data: List[DiveSample] = []
+
+        # Initialize last known values
+        last_values: DiveSample = DiveSample(
+            time=0,
+            depth=0.0,
+            ndl=99,  # Start value for Shearwater
+            pressure=[None] * 4,  # Always 4 tanks in the log
+        )
+
+        for record in dive_records:
+            time_ms = record.find("currentTime")
+            if time_ms is None or time_ms.text is None:
+                raise NoDiveDataError("No current time found in dive record.")
+            last_values.time = int(time_ms.text) // 1000
+
+            depth_elem = record.find("currentDepth")
+            if depth_elem is not None and depth_elem.text is not None:
+                last_values.depth = float(depth_elem.text)
+
+            ndl_elem = record.find("currentNdl")
+            if ndl_elem is not None and ndl_elem.text is not None and ndl_elem.text.isdigit():
+                last_values.ndl = int(ndl_elem.text)
+
+            tts_elem = record.find("ttsMins")
+            if tts_elem is not None and tts_elem.text is not None and tts_elem.text.isdigit():
+                last_values.tts = int(tts_elem.text)
+
+            temp_elem = record.find("waterTemp")
+            if temp_elem is not None and temp_elem.text is not None:
+                try:
+                    last_values.temperature = float(temp_elem.text)
+                except ValueError:
+                    pass
+
+            stop_depth_elem = record.find("firstStopDepth")
+            if stop_depth_elem is not None and stop_depth_elem.text is not None:
+                try:
+                    last_values.stop_depth = float(stop_depth_elem.text)
+                except ValueError:
+                    pass
+
+            stop_time_elem = record.find("firstStopTime")
+            if stop_time_elem is not None and stop_time_elem.text is not None:
+                try:
+                    last_values.stop_time = int(stop_time_elem.text)
+                except ValueError:
+                    pass
+
+            o2_elem = record.find("fractionO2")
+            if o2_elem is not None and o2_elem.text is not None:
+                try:
+                    last_values.fractionO2 = float(o2_elem.text)
+                except ValueError:
+                    pass
+
+            he_elem = record.find("fractionHe")
+            if he_elem is not None and he_elem.text is not None:
+                try:
+                    last_values.fractionHe = float(he_elem.text)
+                except ValueError:
+                    pass
+
+            # tank pressures (convert PSI to bar)
+            for i in range(4):
+                tank_elem = record.find(f"tank{i}pressurePSI")
+                if tank_elem is not None and tank_elem.text is not None:
+                    try:
+                        psi_value = float(tank_elem.text)
+                        last_values.pressure[i] = psi_value * 0.0689476
+                    except ValueError:
+                        # Handle non-numeric values like "AI is off"
+                        last_values.pressure[i] = None
+
+            sac_elem = record.find("sac")
+            if sac_elem is not None and sac_elem.text is not None:
+                try:
+                    last_values.sac = float(sac_elem.text)
+                except ValueError:
+                    # Handle non-numeric values like "Not diving"
+                    pass
+
+            gas_time_elem = record.find("gasTime")
+            if gas_time_elem is not None and gas_time_elem.text is not None:
+                try:
+                    last_values.gtr = int(gas_time_elem.text)
+                except ValueError:
+                    # Handle non-numeric values like "not available", "due to deco not available"
+                    pass
+
+            profile_data.append(copy.deepcopy(last_values))
+
+        print(f"Parsed {len(profile_data)} samples from Shearwater dive log.")
+        print("Sample data:", profile_data[:3])  # Print first 3 samples for debugging
+        return profile_data
+
+
 # Parser registry
 PARSER_REGISTRY = {
     ".ssrf": SubsurfaceParser(),
+    ".xml": ShearwaterParser(),
 }
 
 

@@ -293,7 +293,7 @@ def evaluate_compute_expression(compute_expr: str, data: DiveSample) -> Optional
                 digits = format_spec[:-1]
                 try:
                     precision = int(digits) if digits else 2
-                    formatted_value = f"{int(field_value * 100):0{precision}d}"
+                    formatted_value = f"{round(field_value * 100):0{precision}d}"
                 except (ValueError, TypeError):
                     formatted_value = str(field_value)
             elif 'f' in format_spec:

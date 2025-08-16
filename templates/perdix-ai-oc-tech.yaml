@@ -6,12 +6,12 @@ background_image: "templates/perdix.png"
 chroma_color: "#00FF00"  # bright green used where PNG is transparent
 
 default_label_font:
-  path: "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  name: "Arial Bold"
   size: 20
   color: "#00BAEF"
 
 default_data_font:
-  path: "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  name: "Arial Bold"
   size: 42
   color: "#FFFFFF"
 
@@ -70,7 +70,7 @@ items:
   - type: text
     text: "OC"
     position: { x: 180, y: 400 }
-    font: { size: 42, color: "#FFFFFF" }
+    font: { name: "Arial Bold", size: 42, color: "#FFFFFF" }
 
   - type: data
     compute: "{fractionO2:02%}/{fractionHe:02%}"

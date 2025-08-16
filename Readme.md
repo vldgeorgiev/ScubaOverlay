@@ -29,7 +29,7 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 - **Computed fields** — combine multiple data fields with custom formatting
 - **Automatic unit conversion** — metric ↔ imperial  
 - **Per-item numeric precision** — e.g. 1 decimal for depth, integer for pressures  
-- **Font customization** — size, color, style (bold/italic) from any font file  
+- **Font customization** — size, color, style with automatic fallbacks  
 - **Quick layout testing** — render a single PNG before committing to a video  
 - **Multiple tank pressures** via indexed fields (`pressure[0]`, `pressure[1]`, …)  
 - **Fallback values** for missing data  

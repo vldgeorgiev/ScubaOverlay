@@ -27,12 +27,12 @@ Define default fonts that apply to all items unless overridden:
 
 ```yaml
 default_label_font:
-  path: "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  name: "Arial Bold"
   size: 20
   color: "#00BAEF"
 
 default_data_font:
-  path: "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  name: "Arial Bold"
   size: 42
   color: "#FFFFFF"
 ```
@@ -170,27 +170,18 @@ Create custom displays by combining multiple data fields:
 
 ## Font Override Examples
 
-### System Fonts (macOS)
+### Cross-platform Font Names
 
 ```yaml
 font:
-  path: "/System/Library/Fonts/Helvetica.ttc"
+  name: "Arial Bold"
   size: 24
   color: "#FFFFFF"
 ```
 
-### Custom Fonts
-
-```yaml
-font:
-  path: "./fonts/MyCustomFont.ttf"
-  size: 28
-  color: "#00BAEF"
-```
-
 ### Font Properties
 
-- `path` - Full path to font file (.ttf, .ttc, .otf)
+- `name` - Cross-platform font name (e.g., "Arial Bold")
 - `size` - Font size in pixels
 - `color` - Hex color code (e.g., "#FFFFFF" for white)
 

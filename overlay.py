@@ -1,11 +1,9 @@
 import cv2
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
-from typing import Dict, Any, List, Optional, Callable
+from typing import Dict, Any, List, Optional, Callable, Union
 from parser import DiveSample
-
-# Simple font cache to avoid reloading fonts repeatedly
-_FONT_CACHE: Dict[tuple[str, int], ImageFont.FreeTypeFont] = {}
+from font_utils import get_font_name, get_font
 
 # Canonical source units from parser (Subsurface): meters, bar, Celsius
 _SOURCE_UNITS = {
@@ -97,8 +95,6 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
     default_label_font = template.get("default_label_font", {})
     default_data_font = template.get("default_data_font", {})
 
-    fallback_path = default_label_font.get("path") or default_data_font.get("path") or "/System/Library/Fonts/Supplemental/Arial.ttf"
-
     data_items: List[Dict[str, Any]] = []
 
     for item in template.get("items", []):
@@ -112,10 +108,10 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
 
             # Use label font as default for text items
             font_size = item.get("font", {}).get("size", default_label_font.get("size", 22))
-            font_path = item.get("font", {}).get("path", default_label_font.get("path", fallback_path))
+            font_name = get_font_name(item.get("font", {}), default_label_font)
             font_color = hex_to_rgb(item.get("font", {}).get("color", default_label_font.get("color", "#FFFFFF")))
 
-            font = _get_font(font_path, font_size)
+            font = get_font(font_name, font_size)
             draw.text((x, y), text, font=font, fill=font_color)
 
         elif item_type == "data":
@@ -134,8 +130,8 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
             label_pos = item.get("label_position", {"x": 0, "y": 0})
             label_x, label_y = label_pos.get("x", 0), label_pos.get("y", 0)
             label_font_size = item.get("label_font", {}).get("size", default_label_font.get("size", 22))
-            label_font_path = item.get("label_font", {}).get("path", default_label_font.get("path", fallback_path))
-            label_font = _get_font(label_font_path, label_font_size)
+            label_font_name = get_font_name(item.get("label_font", {}), default_label_font)
+            label_font = get_font(label_font_name, label_font_size)
             label_color = hex_to_rgb(item.get("label_font", {}).get("color", default_label_font.get("color", "#FFFFFF")))
 
             if label:
@@ -148,8 +144,8 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
 
             data_x, data_y = data_pos.get("x", 0), data_pos.get("y", 0)
             data_font_size = item.get("data_font", {}).get("size", default_data_font.get("size", 22))
-            data_font_path = item.get("data_font", {}).get("path", default_data_font.get("path", fallback_path))
-            data_font = _get_font(data_font_path, data_font_size)
+            data_font_name = get_font_name(item.get("data_font", {}), default_data_font)
+            data_font = get_font(data_font_name, data_font_size)
             data_color = hex_to_rgb(item.get("data_color", item.get("data_font", {}).get("color", default_data_font.get("color", "#FFFFFF"))))
             precision = item.get("precision")
 
@@ -376,14 +372,6 @@ def generate_test_template_image(template: Dict[str, Any], output_path: str, uni
     img_array = _render_dynamic_frame(dummy_data, compiled)
     img = Image.fromarray(img_array)
     img.save(output_path)
-
-def _get_font(path: str, size: int) -> ImageFont.FreeTypeFont:
-    key = (path, size)
-    font = _FONT_CACHE.get(key)
-    if font is None:
-        font = ImageFont.truetype(path, size)
-        _FONT_CACHE[key] = font
-    return font
 
 def hex_to_rgb(hex_color):
     hex_color = hex_color.lstrip('#')

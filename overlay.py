@@ -357,15 +357,15 @@ def generate_test_template_image(template: Dict[str, Any], output_path: str, uni
 
     dummy_data = DiveSample(
         depth=30.0,
-        time=8000,  # 8000 seconds = 2 hours, 13 minutes, 20 seconds
+        time=2000,  # 2000 seconds = 33 minutes, 20 seconds
         ndl=15,
         tts=10,
         temperature=22.5,
-        pressure=[200.15, 180.4, 150.50, 120.95],
+        pressure=[200.15, 180, 150.50, 120.95],
         stop_depth=6.0,
         stop_time=3,
-        fractionO2=0.21,
-        fractionHe=0.29,
+        fractionO2=0.18,
+        fractionHe=0.45,
     )
 
     compiled = _compile_template(template, frame_size, units_override)

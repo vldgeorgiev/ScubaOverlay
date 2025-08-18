@@ -137,6 +137,45 @@ class SubsurfaceParser(DiveParser):
             # Append a full snapshot of the current state
             profile_data.append(copy.deepcopy(last_values))
 
+        # Parse gas change events and inject into samples
+        events = divecomputer.findall("event")
+        gas_changes = []
+
+        for event in events:
+            if event.get("name") == "gaschange":
+                time_s = _parse_time_to_seconds(event.get("time"))
+                o2_str = event.get("o2")
+                he_str = event.get("he")
+
+                fraction_o2 = float(o2_str.replace("%", "")) / 100.0 if o2_str else None
+                fraction_he = float(he_str.replace("%", "")) / 100.0 if he_str else None
+
+                gas_changes.append({
+                    "time": time_s,
+                    "fractionO2": fraction_o2,
+                    "fractionHe": fraction_he
+                })
+
+        gas_changes.sort(key=lambda x: x["time"])
+
+        # Inject gas changes into appropriate samples
+        for gas_change in gas_changes:
+            target_time = gas_change["time"]
+
+            # Find the first sample at or after the gas change time and inject gas fractions into the target sample and all subsequent samples
+            target_sample = None
+            for sample in profile_data:
+                if sample.time >= target_time:
+                    target_sample = sample
+                    break
+
+            if target_sample is not None:
+                target_index = profile_data.index(target_sample)
+                for i in range(target_index, len(profile_data)):
+                    profile_data[i].fractionO2 = gas_change["fractionO2"]
+                    profile_data[i].fractionHe = gas_change["fractionHe"]
+
+        print(f"Found {len(gas_changes)} gas change events.")
         print(f"Parsed {len(profile_data)} samples from dive log.")
         print("Sample data:", profile_data[:3])  # Print first 3 samples for debugging
         return profile_data

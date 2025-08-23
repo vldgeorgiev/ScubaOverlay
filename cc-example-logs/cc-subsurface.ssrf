@@ -1,0 +1,548 @@
+<divelog program='subsurface' version='3'>
+<settings>
+<fingerprint model='84a707be' serial='3631a3ec' deviceid='e5f6716e' diveid='14292e62' data='68a4ba43'/>
+</settings>
+<divesites>
+</divesites>
+<dives>
+<dive number='1' otu='110' cns='40%' date='2025-08-19' time='17:54:11' duration='85:20 min'>
+  <cylinder description='tuntematon' o2='99.0%' />
+  <cylinder description='tuntematon' o2='49.0%' he='20.0%' />
+  <cylinder description='tuntematon' o2='16.0%' he='47.0%' />
+  <cylinder description='tuntematon' o2='16.0%' he='52.0%' />
+  <cylinder description='tuntematon' o2='18.0%' he='41.0%' use='diluent' />
+  <divecomputer model='Shearwater Nerd 2' deviceid='e5f6716e' diveid='14292e62' dctype='CCR' no_o2sensors='3'>
+  <depth max='57.8 m' mean='23.49 m' />
+  <temperature water='3.0 C' />
+  <surface pressure='0.982 bar' />
+  <water salinity='1000 g/l' />
+  <extradata key='Logversion' value='14(PNF)' />
+  <extradata key='Serial' value='3631a3ec' />
+  <extradata key='FW Version' value='98' />
+  <extradata key='Deco model' value='GF 40/70' />
+  <extradata key='Battery type' value='3.7V Li-Ion' />
+  <extradata key='Battery at end' value='4.1 V' />
+  <extradata key='Estimated (DiveCAN?) sensor calibration [bar / V]' value='19.13' />
+  <event time='0:10 min' type='25' flags='5' name='gaschange' cylinder='4' o2='18.0%' he='41.0%' />
+  <sample time='0:10 min' depth='0.0 m' temp='18.0 C' tts='1:00 min' sensor1='0.727 bar' sensor2='0.689 bar' sensor3='0.669 bar' dc_supplied_ppo2='0.71 bar' po2='0.7 bar' />
+  <sample time='0:20 min' depth='3.2 m' ndl='99:00 min' sensor1='0.861 bar' sensor2='0.803 bar' sensor3='0.784 bar' dc_supplied_ppo2='0.83 bar' />
+  <sample time='0:30 min' depth='6.0 m' sensor1='0.88 bar' sensor2='0.842 bar' sensor3='0.842 bar' dc_supplied_ppo2='0.88 bar' />
+  <sample time='0:40 min' depth='6.6 m' sensor3='0.861 bar' />
+  <sample time='0:50 min' depth='6.6 m' sensor1='0.727 bar' sensor2='0.689 bar' sensor3='0.746 bar' dc_supplied_ppo2='0.74 bar' />
+  <sample time='1:00 min' depth='6.6 m' sensor1='0.842 bar' sensor2='0.784 bar' sensor3='0.803 bar' dc_supplied_ppo2='0.83 bar' />
+  <sample time='1:10 min' depth='6.5 m' sensor3='0.784 bar' dc_supplied_ppo2='0.82 bar' />
+  <sample time='1:20 min' depth='6.6 m' sensor1='0.65 bar' sensor2='0.631 bar' sensor3='0.708 bar' dc_supplied_ppo2='0.69 bar' />
+  <sample time='1:30 min' depth='6.6 m' sensor1='0.689 bar' sensor2='0.65 bar' sensor3='0.65 bar' dc_supplied_ppo2='0.68 bar' />
+  <sample time='1:40 min' depth='6.5 m' sensor1='0.708 bar' sensor3='0.669 bar' dc_supplied_ppo2='0.69 bar' />
+  <sample time='1:50 min' depth='5.6 m' sensor1='0.65 bar' sensor2='0.612 bar' sensor3='0.612 bar' dc_supplied_ppo2='0.64 bar' />
+  <sample time='2:00 min' depth='6.3 m' sensor3='0.631 bar' />
+  <sample time='2:10 min' depth='6.9 m' sensor1='0.689 bar' sensor2='0.631 bar' sensor3='0.689 bar' dc_supplied_ppo2='0.68 bar' />
+  <sample time='2:20 min' depth='8.4 m' temp='17.0 C' sensor1='0.727 bar' sensor2='0.669 bar' sensor3='0.708 bar' dc_supplied_ppo2='0.72 bar' />
+  <sample time='2:30 min' depth='9.1 m' sensor1='0.708 bar' sensor3='0.689 bar' dc_supplied_ppo2='0.7 bar' />
+  <sample time='2:40 min' depth='10.2 m' sensor1='0.65 bar' sensor2='0.612 bar' sensor3='0.65 bar' dc_supplied_ppo2='0.66 bar' />
+  <sample time='2:50 min' depth='10.9 m' temp='16.0 C' cns='1%' sensor1='0.727 bar' sensor2='0.689 bar' sensor3='0.746 bar' dc_supplied_ppo2='0.74 bar' />
+  <sample time='3:00 min' depth='11.7 m' tts='2:00 min' sensor1='0.746 bar' sensor3='0.727 bar' />
+  <sample time='3:10 min' depth='12.2 m' temp='15.0 C' sensor1='0.669 bar' sensor2='0.631 bar' sensor3='0.669 bar' dc_supplied_ppo2='0.67 bar' />
+  <sample time='3:20 min' depth='13.2 m' temp='14.0 C' sensor1='0.746 bar' sensor2='0.708 bar' sensor3='0.765 bar' dc_supplied_ppo2='0.76 bar' />
+  <sample time='3:30 min' depth='14.5 m' ndl='76:00 min' sensor1='0.727 bar' sensor2='0.669 bar' sensor3='0.727 bar' dc_supplied_ppo2='0.73 bar' />
+  <sample time='3:40 min' depth='15.8 m' temp='13.0 C' sensor3='0.746 bar' dc_supplied_ppo2='0.74 bar' />
+  <sample time='3:50 min' depth='17.1 m' temp='12.0 C' ndl='41:00 min' sensor2='0.689 bar' dc_supplied_ppo2='0.75 bar' />
+  <sample time='4:00 min' depth='17.8 m' temp='11.0 C' ndl='35:00 min' sensor1='0.765 bar' sensor2='0.708 bar' sensor3='0.765 bar' dc_supplied_ppo2='0.77 bar' />
+  <sample time='4:10 min' depth='18.7 m' temp='10.0 C' ndl='33:00 min' sensor3='0.784 bar' dc_supplied_ppo2='0.78 bar' />
+  <sample time='4:20 min' depth='19.7 m' ndl='25:00 min' sensor1='0.727 bar' sensor2='0.689 bar' dc_supplied_ppo2='0.77 bar' />
+  <sample time='4:30 min' depth='21.1 m' temp='9.0 C' ndl='20:00 min' tts='3:00 min' sensor1='0.784 bar' sensor2='0.727 bar' sensor3='0.803 bar' dc_supplied_ppo2='0.79 bar' />
+  <sample time='4:40 min' depth='22.0 m' ndl='19:00 min' sensor1='0.765 bar' sensor2='0.708 bar' dc_supplied_ppo2='0.78 bar' />
+  <sample time='4:50 min' depth='22.7 m' temp='8.0 C' ndl='16:00 min' sensor1='0.784 bar' sensor2='0.727 bar' dc_supplied_ppo2='0.79 bar' />
+  <sample time='5:00 min' depth='23.9 m' ndl='15:00 min' sensor3='0.822 bar' dc_supplied_ppo2='0.81 bar' />
+  <sample time='5:10 min' depth='24.2 m' temp='7.0 C' ndl='13:00 min' sensor1='0.803 bar' sensor2='0.746 bar' sensor3='0.842 bar' />
+  <sample time='5:20 min' depth='24.6 m' ndl='12:00 min' sensor1='0.784 bar' sensor2='0.727 bar' sensor3='0.822 bar' dc_supplied_ppo2='0.8 bar' />
+  <sample time='5:30 min' depth='25.5 m' temp='6.0 C' ndl='11:00 min' sensor3='0.842 bar' dc_supplied_ppo2='0.81 bar' />
+  <sample time='5:40 min' depth='27.3 m' ndl='9:00 min' />
+  <sample time='5:50 min' depth='27.4 m' />
+  <sample time='6:00 min' depth='27.6 m' ndl='8:00 min' sensor1='0.765 bar' sensor3='0.822 bar' dc_supplied_ppo2='0.8 bar' />
+  <sample time='6:10 min' depth='28.0 m' temp='5.0 C' ndl='7:00 min' sensor2='0.708 bar' dc_supplied_ppo2='0.79 bar' />
+  <sample time='6:20 min' depth='28.8 m' dc_supplied_ppo2='0.78 bar' />
+  <sample time='6:30 min' depth='30.1 m' ndl='6:00 min' dc_supplied_ppo2='0.79 bar' />
+  <sample time='6:40 min' depth='31.5 m' sensor1='0.784 bar' sensor2='0.727 bar' sensor3='0.842 bar' dc_supplied_ppo2='0.81 bar' />
+  <sample time='6:50 min' depth='33.1 m' ndl='4:00 min' tts='4:00 min' sensor3='0.861 bar' dc_supplied_ppo2='0.82 bar' />
+  <sample time='7:00 min' depth='34.8 m' temp='4.0 C' sensor1='0.803 bar' sensor2='0.746 bar' sensor3='0.88 bar' dc_supplied_ppo2='0.78 bar' />
+  <sample time='7:10 min' depth='36.3 m' ndl='3:00 min' sensor1='0.822 bar' sensor2='0.765 bar' sensor3='0.899 bar' dc_supplied_ppo2='0.85 bar' />
+  <sample time='7:20 min' depth='37.6 m' ndl='2:00 min' sensor1='0.842 bar' sensor2='0.784 bar' sensor3='0.918 bar' dc_supplied_ppo2='0.87 bar' />
+  <sample time='7:30 min' depth='38.2 m' cns='2%' sensor1='0.88 bar' sensor2='0.803 bar' sensor3='0.995 bar' dc_supplied_ppo2='0.85 bar' />
+  <sample time='7:40 min' depth='38.4 m' sensor2='0.822 bar' sensor3='0.975 bar' />
+  <sample time='7:50 min' depth='38.9 m' sensor1='0.861 bar' sensor2='0.803 bar' sensor3='0.956 bar' />
+  <sample time='8:00 min' depth='39.5 m' dc_supplied_ppo2='0.84 bar' />
+  <sample time='8:10 min' depth='39.9 m' ndl='1:00 min' />
+  <sample time='8:20 min' depth='40.7 m' tts='5:00 min' />
+  <sample time='8:30 min' depth='41.4 m' sensor1='0.88 bar' sensor3='0.975 bar' dc_supplied_ppo2='0.85 bar' />
+  <sample time='8:40 min' depth='41.9 m' ndl='0:00 min' />
+  <sample time='8:50 min' depth='42.4 m' />
+  <sample time='9:00 min' depth='42.9 m' temp='3.0 C' />
+  <sample time='9:10 min' depth='43.1 m' po2='1.2 bar' />
+  <sample time='9:20 min' depth='43.7 m' sensor1='1.014 bar' sensor2='1.014 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.03 bar' />
+  <sample time='9:30 min' depth='44.2 m' sensor1='1.148 bar' sensor2='1.129 bar' sensor3='1.492 bar' dc_supplied_ppo2='1.16 bar' />
+  <sample time='9:40 min' depth='44.3 m' sensor1='1.167 bar' sensor2='1.071 bar' sensor3='1.339 bar' dc_supplied_ppo2='1.12 bar' />
+  <sample time='9:50 min' depth='43.8 m' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='10:00 min' depth='43.0 m' sensor2='1.109 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='10:10 min' depth='42.9 m' sensor1='1.224 bar' sensor2='1.129 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='10:20 min' depth='43.4 m' tts='6:00 min' in_deco='1' stoptime='1:00 min' stopdepth='3.0 m' sensor1='1.243 bar' sensor2='1.148 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='10:30 min' depth='43.2 m' cns='3%' sensor1='1.224 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='10:40 min' depth='43.3 m' sensor3='1.377 bar' />
+  <sample time='10:50 min' depth='44.0 m' />
+  <sample time='11:00 min' depth='44.9 m' stopdepth='6.0 m' sensor1='1.243 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='11:10 min' depth='46.3 m' stopdepth='3.0 m' sensor1='1.262 bar' sensor2='1.167 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='11:20 min' depth='47.3 m' sensor1='1.282 bar' sensor2='1.186 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.25 bar' />
+  <sample time='11:30 min' depth='46.5 m' stopdepth='6.0 m' sensor1='1.243 bar' sensor2='1.148 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='11:40 min' depth='46.4 m' />
+  <sample time='11:50 min' depth='45.3 m' tts='7:00 min' sensor1='1.205 bar' sensor2='1.109 bar' sensor3='1.377 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='12:00 min' depth='45.0 m' sensor1='1.186 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.16 bar' />
+  <sample time='12:10 min' depth='44.8 m' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='12:20 min' depth='44.7 m' tts='8:00 min' sensor1='1.186 bar' sensor2='1.109 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='12:30 min' depth='44.7 m' sensor1='1.205 bar' sensor2='1.129 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='12:40 min' depth='44.6 m' tts='7:00 min' cns='4%' sensor3='1.415 bar' />
+  <sample time='12:50 min' depth='44.6 m' sensor3='1.396 bar' />
+  <sample time='13:00 min' depth='44.7 m' tts='8:00 min' stopdepth='9.0 m' sensor3='1.415 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='13:10 min' depth='44.8 m' tts='7:00 min' sensor1='1.224 bar' sensor3='1.377 bar' />
+  <sample time='13:20 min' depth='45.4 m' tts='8:00 min' sensor2='1.148 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='13:30 min' depth='46.4 m' />
+  <sample time='13:40 min' depth='47.0 m' tts='9:00 min' sensor1='1.243 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='13:50 min' depth='47.3 m' sensor2='1.167 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='14:00 min' depth='47.7 m' tts='10:00 min' sensor2='1.148 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='14:10 min' depth='48.3 m' tts='9:00 min' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='14:20 min' depth='49.0 m' sensor1='1.224 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='14:30 min' depth='49.9 m' tts='10:00 min' sensor2='1.148 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='14:40 min' depth='50.8 m' sensor2='1.129 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='14:50 min' depth='51.7 m' stopdepth='12.0 m' cns='5%' sensor1='1.243 bar' sensor2='1.148 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='15:00 min' depth='52.7 m' tts='11:00 min' />
+  <sample time='15:10 min' depth='53.1 m' tts='12:00 min' />
+  <sample time='15:20 min' depth='53.1 m' sensor1='1.224 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='15:30 min' depth='53.3 m' tts='13:00 min' sensor2='1.129 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='15:40 min' depth='53.4 m' />
+  <sample time='15:50 min' depth='53.6 m' />
+  <sample time='16:00 min' depth='53.6 m' sensor1='1.205 bar' sensor3='1.435 bar' />
+  <sample time='16:10 min' depth='53.7 m' tts='14:00 min' sensor2='1.109 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='16:20 min' depth='54.0 m' sensor2='1.148 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='16:30 min' depth='54.1 m' tts='15:00 min' sensor2='1.129 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='16:40 min' depth='54.2 m' />
+  <sample time='16:50 min' depth='54.6 m' tts='16:00 min' cns='6%' />
+  <sample time='17:00 min' depth='54.2 m' tts='15:00 min' stopdepth='15.0 m' />
+  <sample time='17:10 min' depth='53.7 m' sensor1='1.186 bar' sensor2='1.109 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='17:20 min' depth='53.1 m' tts='16:00 min' sensor3='1.435 bar' />
+  <sample time='17:30 min' depth='52.3 m' sensor2='1.129 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='17:40 min' depth='51.2 m' tts='15:00 min' sensor1='1.167 bar' sensor2='1.09 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='17:50 min' depth='51.3 m' tts='16:00 min' sensor1='1.186 bar' sensor2='1.129 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='18:00 min' depth='51.4 m' sensor1='1.205 bar' />
+  <sample time='18:10 min' depth='52.1 m' tts='17:00 min' sensor1='1.224 bar' sensor2='1.148 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='18:20 min' depth='53.1 m' />
+  <sample time='18:30 min' depth='54.1 m' sensor1='1.262 bar' sensor2='1.167 bar' sensor3='1.473 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='18:40 min' depth='54.7 m' />
+  <sample time='18:50 min' depth='55.0 m' tts='18:00 min' />
+  <sample time='19:00 min' depth='55.4 m' tts='19:00 min' cns='7%' />
+  <sample time='19:10 min' depth='54.9 m' sensor1='1.224 bar' sensor2='1.148 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='19:20 min' depth='54.9 m' tts='20:00 min' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='19:30 min' depth='54.6 m' tts='19:00 min' />
+  <sample time='19:40 min' depth='54.4 m' tts='20:00 min' sensor3='1.435 bar' />
+  <sample time='19:50 min' depth='55.1 m' sensor1='1.224 bar' sensor2='1.167 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='20:00 min' depth='55.8 m' tts='21:00 min' stopdepth='18.0 m' sensor2='1.148 bar' sensor3='1.473 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='20:10 min' depth='56.4 m' tts='22:00 min' sensor1='1.243 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='20:20 min' depth='56.2 m' tts='21:00 min' sensor1='1.224 bar' sensor2='1.129 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='20:30 min' depth='56.3 m' tts='22:00 min' sensor1='1.205 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='20:40 min' depth='56.6 m' tts='23:00 min' sensor1='1.224 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='20:50 min' depth='56.6 m' sensor1='1.205 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='21:00 min' depth='56.9 m' tts='24:00 min' sensor3='1.435 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='21:10 min' depth='57.6 m' cns='8%' sensor1='1.224 bar' sensor2='1.167 bar' sensor3='1.473 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='21:20 min' depth='57.4 m' tts='23:00 min' sensor2='1.148 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='21:30 min' depth='55.3 m' tts='24:00 min' sensor1='1.186 bar' sensor2='1.09 bar' sensor3='1.377 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='21:40 min' depth='55.1 m' tts='25:00 min' sensor2='1.109 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.16 bar' />
+  <sample time='21:50 min' depth='55.6 m' tts='24:00 min' sensor1='1.224 bar' sensor2='1.148 bar' sensor3='1.511 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='22:00 min' depth='56.1 m' tts='25:00 min' sensor2='1.129 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='22:10 min' depth='55.9 m' sensor3='1.435 bar' />
+  <sample time='22:20 min' depth='55.9 m' tts='26:00 min' sensor1='1.205 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='22:30 min' depth='56.1 m' sensor1='1.224 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='22:40 min' depth='56.6 m' dc_supplied_ppo2='1.2 bar' />
+  <sample time='22:50 min' depth='56.3 m' tts='27:00 min' sensor3='1.435 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='23:00 min' depth='56.1 m' />
+  <sample time='23:10 min' depth='56.6 m' tts='28:00 min' sensor2='1.148 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='23:20 min' depth='56.7 m' stopdepth='21.0 m' cns='9%' sensor2='1.129 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='23:30 min' depth='56.6 m' tts='29:00 min' />
+  <sample time='23:40 min' depth='56.5 m' sensor3='1.435 bar' />
+  <sample time='23:50 min' depth='56.8 m' tts='30:00 min' />
+  <sample time='24:00 min' depth='57.1 m' tts='29:00 min' sensor2='1.148 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='24:10 min' depth='56.6 m' tts='30:00 min' sensor2='1.129 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='24:20 min' depth='56.7 m' tts='31:00 min' sensor1='1.205 bar' sensor3='1.415 bar' />
+  <sample time='24:30 min' depth='57.0 m' sensor1='1.224 bar' sensor2='1.167 bar' sensor3='1.492 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='24:40 min' depth='56.6 m' tts='32:00 min' sensor2='1.129 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='24:50 min' depth='56.5 m' />
+  <sample time='25:00 min' depth='57.1 m' sensor3='1.454 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='25:10 min' depth='57.2 m' dc_supplied_ppo2='1.2 bar' />
+  <sample time='25:20 min' depth='57.0 m' tts='33:00 min' cns='10%' sensor3='1.435 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='25:30 min' depth='57.2 m' dc_supplied_ppo2='1.18 bar' />
+  <sample time='25:40 min' depth='57.1 m' tts='34:00 min' sensor1='1.205 bar' sensor2='1.109 bar' />
+  <sample time='25:50 min' depth='56.9 m' sensor2='1.129 bar' sensor3='1.454 bar' />
+  <sample time='26:00 min' depth='57.1 m' sensor1='1.224 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='26:10 min' depth='57.1 m' sensor3='1.473 bar' />
+  <sample time='26:20 min' depth='57.1 m' tts='35:00 min' sensor3='1.435 bar' />
+  <sample time='26:30 min' depth='57.3 m' sensor3='1.415 bar' />
+  <sample time='26:40 min' depth='57.5 m' tts='36:00 min' sensor1='1.205 bar' sensor2='1.109 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='26:50 min' depth='57.6 m' tts='37:00 min' sensor1='1.224 bar' sensor2='1.129 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='27:00 min' depth='57.3 m' tts='36:00 min' sensor3='1.435 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='27:10 min' depth='57.4 m' sensor3='1.454 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='27:20 min' depth='57.1 m' tts='37:00 min' stopdepth='24.0 m' sensor1='1.205 bar' sensor2='1.109 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='27:30 min' depth='57.6 m' tts='38:00 min' cns='11%' sensor2='1.129 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='27:40 min' depth='57.3 m' sensor2='1.109 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='27:50 min' depth='57.3 m' tts='39:00 min' sensor2='1.129 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='28:00 min' depth='57.3 m' tts='38:00 min' sensor3='1.492 bar' />
+  <sample time='28:10 min' depth='57.1 m' tts='40:00 min' sensor2='1.109 bar' sensor3='1.435 bar' />
+  <sample time='28:20 min' depth='57.2 m' sensor1='1.224 bar' sensor2='1.129 bar' sensor3='1.473 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='28:30 min' depth='57.0 m' tts='41:00 min' sensor1='1.205 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='28:40 min' depth='57.1 m' tts='40:00 min' sensor1='1.243 bar' sensor2='1.148 bar' sensor3='1.473 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='28:50 min' depth='56.9 m' sensor1='1.224 bar' sensor2='1.129 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='29:00 min' depth='56.9 m' tts='42:00 min' sensor2='1.109 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='29:10 min' depth='57.0 m' sensor2='1.129 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='29:20 min' depth='56.9 m' tts='43:00 min' sensor2='1.109 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='29:30 min' depth='56.6 m' sensor2='1.129 bar' />
+  <sample time='29:40 min' depth='56.6 m' tts='42:00 min' cns='12%' sensor3='1.454 bar' />
+  <sample time='29:50 min' depth='56.5 m' tts='44:00 min' />
+  <sample time='30:00 min' depth='56.6 m' dc_supplied_ppo2='1.2 bar' />
+  <sample time='30:10 min' depth='56.4 m' tts='45:00 min' sensor1='1.205 bar' sensor2='1.109 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='30:20 min' depth='55.8 m' dc_supplied_ppo2='1.17 bar' />
+  <sample time='30:30 min' depth='55.3 m' tts='46:00 min' />
+  <sample time='30:40 min' depth='54.9 m' tts='45:00 min' sensor2='1.129 bar' sensor3='1.454 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='30:50 min' depth='54.5 m' sensor3='1.473 bar' />
+  <sample time='31:00 min' depth='53.5 m' tts='46:00 min' sensor2='1.109 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='31:10 min' depth='52.8 m' sensor1='1.186 bar' sensor3='1.454 bar' />
+  <sample time='31:20 min' depth='51.6 m' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.473 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='31:30 min' depth='50.6 m' sensor1='1.186 bar' sensor3='1.435 bar' />
+  <sample time='31:40 min' depth='49.3 m' sensor1='1.167 bar' sensor2='1.109 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='31:50 min' depth='48.3 m' cns='13%' sensor1='1.186 bar' sensor2='1.129 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='32:00 min' depth='47.8 m' tts='45:00 min' sensor3='1.454 bar' />
+  <sample time='32:10 min' depth='46.5 m' tts='47:00 min' sensor1='1.167 bar' sensor2='1.09 bar' sensor3='1.377 bar' dc_supplied_ppo2='1.14 bar' />
+  <sample time='32:20 min' depth='45.4 m' sensor1='1.205 bar' sensor2='1.109 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='32:30 min' depth='44.4 m' sensor1='1.243 bar' sensor2='1.167 bar' sensor3='1.53 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='32:40 min' depth='43.2 m' tts='45:00 min' sensor1='1.205 bar' sensor2='1.109 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='32:50 min' depth='42.2 m' tts='46:00 min' sensor1='1.186 bar' sensor2='1.09 bar' sensor3='1.358 bar' dc_supplied_ppo2='1.16 bar' />
+  <sample time='33:00 min' depth='41.0 m' tts='47:00 min' sensor3='1.377 bar' />
+  <sample time='33:10 min' depth='39.8 m' tts='46:00 min' sensor2='1.109 bar' sensor3='1.396 bar' />
+  <sample time='33:20 min' depth='38.5 m' sensor2='1.09 bar' sensor3='1.358 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='33:30 min' depth='37.3 m' tts='47:00 min' sensor1='1.167 bar' sensor3='1.339 bar' />
+  <sample time='33:40 min' depth='36.1 m' tts='46:00 min' sensor3='1.32 bar' dc_supplied_ppo2='1.14 bar' />
+  <sample time='33:50 min' depth='35.0 m' sensor2='1.109 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='34:00 min' depth='34.1 m' cns='14%' sensor2='1.129 bar' sensor3='1.339 bar' dc_supplied_ppo2='1.16 bar' />
+  <sample time='34:10 min' depth='33.6 m' sensor2='1.109 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='34:20 min' depth='33.0 m' sensor1='1.186 bar' sensor2='1.129 bar' sensor3='1.358 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='34:30 min' depth='32.2 m' sensor1='1.167 bar' sensor2='1.109 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.24 bar' />
+  <sample time='34:40 min' depth='32.1 m' tts='43:00 min' sensor1='1.186 bar' dc_supplied_ppo2='1.16 bar' />
+  <sample time='34:50 min' depth='31.7 m' tts='45:00 min' />
+  <sample time='35:00 min' depth='31.4 m' tts='46:00 min' sensor2='1.09 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='35:10 min' depth='31.2 m' tts='43:00 min' sensor3='1.301 bar' />
+  <sample time='35:20 min' depth='31.1 m' sensor2='1.109 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.24 bar' />
+  <sample time='35:30 min' depth='30.3 m' tts='46:00 min' sensor1='1.167 bar' sensor2='1.09 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.14 bar' />
+  <sample time='35:40 min' depth='29.8 m' tts='45:00 min' stoptime='2:00 min' stopdepth='21.0 m' sensor1='1.148 bar' sensor2='1.071 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='35:50 min' depth='29.3 m' tts='46:00 min' sensor1='1.129 bar' sensor2='1.052 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='36:00 min' depth='28.8 m' tts='45:00 min' dc_supplied_ppo2='1.18 bar' />
+  <sample time='36:10 min' depth='28.6 m' tts='46:00 min' cns='15%' sensor3='1.282 bar' dc_supplied_ppo2='1.11 bar' />
+  <sample time='36:20 min' depth='28.1 m' tts='47:00 min' sensor1='1.186 bar' sensor2='1.09 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.14 bar' />
+  <sample time='36:30 min' depth='27.5 m' tts='43:00 min' sensor1='1.167 bar' sensor2='1.109 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='36:40 min' depth='26.9 m' tts='39:00 min' stoptime='1:00 min' sensor1='1.377 bar' sensor2='1.282 bar' sensor3='1.492 bar' dc_supplied_ppo2='1.43 bar' />
+  <sample time='36:50 min' depth='26.5 m' tts='41:00 min' sensor1='1.224 bar' sensor2='1.148 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='37:00 min' depth='25.6 m' tts='42:00 min' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.25 bar' />
+  <sample time='37:10 min' depth='24.6 m' sensor1='1.167 bar' sensor2='1.09 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='37:20 min' depth='24.1 m' tts='44:00 min' sensor1='1.148 bar' sensor2='1.071 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='37:30 min' depth='23.1 m' tts='45:00 min' sensor1='1.109 bar' sensor2='1.052 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='37:40 min' depth='22.3 m' tts='44:00 min' sensor3='1.205 bar' />
+  <sample time='37:50 min' depth='21.9 m' sensor1='1.129 bar' sensor2='1.071 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='38:00 min' depth='21.5 m' temp='4.0 C' sensor1='1.186 bar' sensor2='1.109 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.24 bar' />
+  <sample time='38:10 min' depth='21.3 m' tts='41:00 min' sensor1='1.243 bar' sensor2='1.186 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='38:20 min' depth='21.2 m' cns='16%' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='38:30 min' depth='21.2 m' stoptime='2:00 min' stopdepth='18.0 m' sensor1='1.186 bar' sensor2='1.109 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='38:40 min' depth='21.2 m' dc_supplied_ppo2='1.22 bar' />
+  <sample time='38:50 min' depth='20.7 m' sensor1='1.167 bar' sensor2='1.09 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='39:00 min' depth='20.0 m' tts='43:00 min' sensor1='1.148 bar' sensor2='1.071 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='39:10 min' depth='19.5 m' sensor1='1.129 bar' sensor2='1.052 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.16 bar' />
+  <sample time='39:20 min' depth='19.1 m' tts='42:00 min' sensor1='1.148 bar' sensor2='1.09 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='39:30 min' depth='19.0 m' sensor2='1.071 bar' sensor3='1.205 bar' />
+  <sample time='39:40 min' depth='18.8 m' sensor1='1.339 bar' sensor2='1.32 bar' sensor3='1.492 bar' dc_supplied_ppo2='1.42 bar' />
+  <sample time='39:50 min' depth='18.7 m' tts='39:00 min' stoptime='1:00 min' sensor1='1.224 bar' sensor2='1.167 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='40:00 min' depth='18.7 m' tts='40:00 min' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='40:10 min' depth='18.7 m' sensor1='1.224 bar' sensor2='1.148 bar' dc_supplied_ppo2='1.24 bar' />
+  <sample time='40:20 min' depth='18.7 m' tts='39:00 min' cns='17%' />
+  <sample time='40:30 min' depth='18.6 m' sensor1='1.205 bar' sensor2='1.129 bar' />
+  <sample time='40:40 min' depth='18.5 m' sensor1='1.224 bar' sensor2='1.205 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.32 bar' />
+  <sample time='40:50 min' depth='17.8 m' tts='36:00 min' stoptime='3:00 min' stopdepth='15.0 m' sensor1='1.358 bar' sensor2='1.301 bar' dc_supplied_ppo2='1.4 bar' />
+  <sample time='41:00 min' depth='17.4 m' tts='37:00 min' sensor1='1.243 bar' sensor2='1.167 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='41:10 min' depth='17.4 m' tts='39:00 min' sensor1='1.224 bar' sensor2='1.148 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.25 bar' />
+  <sample time='41:20 min' depth='16.8 m' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='41:30 min' depth='16.5 m' tts='40:00 min' sensor1='1.186 bar' sensor2='1.109 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='41:40 min' depth='16.2 m' temp='5.0 C' tts='39:00 min' sensor1='1.167 bar' sensor2='1.09 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='41:50 min' depth='16.0 m' tts='40:00 min' sensor1='1.243 bar' sensor2='1.186 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='42:00 min' depth='15.9 m' tts='38:00 min' stoptime='2:00 min' sensor1='1.186 bar' sensor2='1.109 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='42:10 min' depth='15.7 m' tts='39:00 min' cns='18%' sensor1='1.167 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='42:20 min' depth='15.8 m' dc_supplied_ppo2='1.2 bar' />
+  <sample time='42:30 min' depth='15.6 m' sensor2='1.09 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='42:40 min' depth='15.5 m' sensor1='1.148 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='42:50 min' depth='15.4 m' sensor1='1.262 bar' sensor2='1.282 bar' sensor3='1.415 bar' dc_supplied_ppo2='1.35 bar' />
+  <sample time='43:00 min' depth='15.4 m' tts='35:00 min' stoptime='1:00 min' sensor1='1.339 bar' sensor3='1.377 bar' dc_supplied_ppo2='1.37 bar' />
+  <sample time='43:10 min' depth='15.4 m' tts='36:00 min' sensor1='1.224 bar' sensor2='1.186 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='43:20 min' depth='15.4 m' temp='6.0 C' tts='37:00 min' sensor2='1.167 bar' sensor3='1.282 bar' />
+  <sample time='43:30 min' depth='15.3 m' sensor1='1.243 bar' sensor2='1.186 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='43:40 min' depth='15.2 m' tts='36:00 min' sensor1='1.262 bar' sensor2='1.205 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='43:50 min' depth='15.3 m' sensor2='1.186 bar' />
+  <sample time='44:00 min' depth='15.3 m' cns='19%' sensor1='1.243 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='44:10 min' depth='14.9 m' stoptime='5:00 min' stopdepth='12.0 m' dc_supplied_ppo2='1.27 bar' />
+  <sample time='44:20 min' depth='14.2 m' sensor1='1.205 bar' sensor2='1.148 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='44:30 min' depth='13.6 m' tts='37:00 min' sensor1='1.186 bar' sensor2='1.109 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='44:40 min' depth='13.3 m' tts='38:00 min' sensor1='1.167 bar' sensor2='1.09 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='44:50 min' depth='13.0 m' sensor1='1.148 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='45:00 min' depth='12.7 m' tts='37:00 min' stoptime='4:00 min' />
+  <sample time='45:10 min' depth='12.5 m' temp='7.0 C' tts='34:00 min' sensor1='1.339 bar' sensor2='1.301 bar' sensor3='1.435 bar' dc_supplied_ppo2='1.39 bar' />
+  <sample time='45:20 min' depth='12.4 m' sensor1='1.243 bar' sensor2='1.186 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='45:30 min' depth='12.5 m' tts='35:00 min' sensor1='1.224 bar' sensor2='1.167 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.25 bar' />
+  <sample time='45:40 min' depth='12.4 m' />
+  <sample time='45:50 min' depth='12.4 m' tts='34:00 min' stoptime='3:00 min' sensor2='1.148 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.24 bar' />
+  <sample time='46:00 min' depth='12.4 m' cns='20%' />
+  <sample time='46:10 min' depth='12.3 m' sensor1='1.205 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='46:20 min' depth='12.2 m' sensor3='1.224 bar' />
+  <sample time='46:30 min' depth='12.3 m' sensor1='1.32 bar' sensor2='1.282 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.37 bar' />
+  <sample time='46:40 min' depth='12.2 m' temp='8.0 C' tts='33:00 min' stoptime='2:00 min' sensor1='1.282 bar' sensor2='1.224 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.31 bar' />
+  <sample time='46:50 min' depth='12.1 m' sensor1='1.243 bar' sensor2='1.186 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='47:00 min' depth='12.2 m' sensor3='1.282 bar' />
+  <sample time='47:10 min' depth='12.3 m' dc_supplied_ppo2='1.28 bar' po2='0.7 bar' />
+  <sample time='47:20 min' depth='12.3 m' dc_supplied_ppo2='1.27 bar' />
+  <sample time='47:30 min' depth='12.3 m' />
+  <sample time='47:40 min' depth='12.3 m' sensor3='1.262 bar' />
+  <sample time='47:50 min' depth='12.2 m' tts='32:00 min' stoptime='1:00 min' cns='21%' sensor2='1.167 bar' dc_supplied_ppo2='1.26 bar' />
+  <sample time='48:00 min' depth='12.2 m' />
+  <sample time='48:10 min' depth='12.1 m' />
+  <sample time='48:20 min' depth='12.1 m' />
+  <sample time='48:30 min' depth='12.2 m' />
+  <sample time='48:40 min' depth='12.2 m' dc_supplied_ppo2='1.25 bar' />
+  <sample time='48:50 min' depth='12.1 m' stoptime='6:00 min' stopdepth='9.0 m' dc_supplied_ppo2='1.26 bar' />
+  <sample time='49:00 min' depth='11.4 m' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='49:10 min' depth='10.8 m' sensor1='1.167 bar' sensor2='1.109 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='49:20 min' depth='10.4 m' temp='9.0 C' sensor1='1.148 bar' sensor2='1.09 bar' sensor3='1.167 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='49:30 min' depth='9.9 m' tts='33:00 min' sensor1='1.129 bar' sensor2='1.052 bar' sensor3='1.129 bar' dc_supplied_ppo2='1.14 bar' />
+  <sample time='49:40 min' depth='9.5 m' tts='34:00 min' sensor1='1.09 bar' sensor2='1.033 bar' sensor3='1.109 bar' dc_supplied_ppo2='1.11 bar' />
+  <sample time='49:50 min' depth='9.5 m' sensor2='1.014 bar' sensor3='1.09 bar' dc_supplied_ppo2='1.09 bar' />
+  <sample time='50:00 min' depth='9.4 m' temp='10.0 C' tts='31:00 min' cns='22%' sensor1='1.224 bar' sensor2='1.205 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='50:10 min' depth='9.4 m' tts='29:00 min' stoptime='5:00 min' sensor1='1.358 bar' sensor2='1.301 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.39 bar' />
+  <sample time='50:20 min' depth='9.4 m' sensor1='1.243 bar' sensor2='1.186 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='50:30 min' depth='9.4 m' temp='11.0 C' tts='30:00 min' sensor1='1.186 bar' sensor2='1.129 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='50:40 min' depth='9.4 m' tts='31:00 min' sensor3='1.205 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='50:50 min' depth='9.3 m' />
+  <sample time='51:00 min' depth='9.2 m' temp='12.0 C' sensor3='1.186 bar' />
+  <sample time='51:10 min' depth='9.2 m' tts='30:00 min' sensor1='1.282 bar' sensor2='1.262 bar' sensor3='1.377 bar' dc_supplied_ppo2='1.34 bar' />
+  <sample time='51:20 min' depth='9.2 m' tts='27:00 min' stoptime='4:00 min' sensor1='1.377 bar' sensor2='1.301 bar' sensor3='1.396 bar' dc_supplied_ppo2='1.4 bar' />
+  <sample time='51:30 min' depth='9.1 m' temp='13.0 C' tts='28:00 min' sensor1='1.282 bar' sensor2='1.224 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.31 bar' />
+  <sample time='51:40 min' depth='9.1 m' tts='29:00 min' sensor1='1.243 bar' sensor2='1.186 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='51:50 min' depth='9.1 m' cns='23%' sensor1='1.262 bar' dc_supplied_ppo2='1.28 bar' po2='1.2 bar' />
+  <sample time='52:00 min' depth='9.1 m' dc_supplied_ppo2='1.27 bar' />
+  <sample time='52:10 min' depth='9.1 m' tts='28:00 min' stoptime='3:00 min' />
+  <sample time='52:20 min' depth='9.1 m' />
+  <sample time='52:30 min' depth='9.1 m' dc_supplied_ppo2='1.28 bar' />
+  <sample time='52:40 min' depth='9.1 m' temp='14.0 C' />
+  <sample time='52:50 min' depth='9.1 m' />
+  <sample time='53:00 min' depth='9.1 m' dc_supplied_ppo2='1.27 bar' />
+  <sample time='53:10 min' depth='9.1 m' sensor3='1.243 bar' />
+  <sample time='53:20 min' depth='9.1 m' tts='27:00 min' stoptime='2:00 min' dc_supplied_ppo2='1.26 bar' />
+  <sample time='53:30 min' depth='9.1 m' dc_supplied_ppo2='1.27 bar' po2='1.3 bar' />
+  <sample time='53:40 min' depth='9.1 m' cns='24%' sensor2='1.205 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='53:50 min' depth='9.2 m' sensor1='1.282 bar' sensor2='1.224 bar' dc_supplied_ppo2='1.3 bar' />
+  <sample time='54:00 min' depth='9.1 m' sensor1='1.262 bar' sensor2='1.186 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='54:10 min' depth='9.1 m' tts='26:00 min' stoptime='1:00 min' dc_supplied_ppo2='1.28 bar' />
+  <sample time='54:20 min' depth='9.1 m' sensor1='1.282 bar' sensor2='1.205 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.3 bar' />
+  <sample time='54:30 min' depth='9.1 m' sensor2='1.224 bar' dc_supplied_ppo2='1.31 bar' />
+  <sample time='54:40 min' depth='9.2 m' sensor1='1.301 bar' />
+  <sample time='54:50 min' depth='9.2 m' sensor1='1.282 bar' sensor2='1.205 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.3 bar' />
+  <sample time='55:00 min' depth='9.2 m' />
+  <sample time='55:10 min' depth='9.3 m' />
+  <sample time='55:20 min' depth='9.0 m' stoptime='9:00 min' stopdepth='6.0 m' sensor1='1.262 bar' sensor2='1.186 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='55:30 min' depth='8.7 m' tts='25:00 min' cns='25%' sensor1='1.243 bar' sensor2='1.167 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.26 bar' />
+  <sample time='55:40 min' depth='9.1 m' sensor1='1.282 bar' sensor2='1.205 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.3 bar' />
+  <sample time='55:50 min' depth='9.1 m' sensor1='1.301 bar' sensor2='1.224 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.32 bar' />
+  <sample time='56:00 min' depth='8.1 m' sensor1='1.243 bar' sensor2='1.167 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.24 bar' />
+  <sample time='56:10 min' depth='7.5 m' temp='15.0 C' tts='26:00 min' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='56:20 min' depth='6.9 m' sensor1='1.186 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='56:30 min' depth='6.6 m' tts='25:00 min' sensor3='1.186 bar' po2='0.7 bar' />
+  <sample time='56:40 min' depth='6.5 m' sensor1='1.167 bar' sensor2='1.109 bar' sensor3='1.167 bar' dc_supplied_ppo2='1.18 bar' />
+  <sample time='56:50 min' depth='6.3 m' sensor1='1.148 bar' sensor2='1.071 bar' sensor3='1.129 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='57:00 min' depth='6.2 m' tts='26:00 min' sensor1='1.282 bar' sensor2='1.243 bar' sensor3='1.301 bar' dc_supplied_ppo2='1.31 bar' />
+  <sample time='57:10 min' depth='6.2 m' temp='16.0 C' tts='24:00 min' stoptime='8:00 min' sensor1='1.32 bar' sensor2='1.262 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.34 bar' />
+  <sample time='57:20 min' depth='6.3 m' stoptime='7:00 min' cns='26%' sensor1='1.262 bar' sensor2='1.186 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.26 bar' />
+  <sample time='57:30 min' depth='6.3 m' tts='23:00 min' stoptime='8:00 min' />
+  <sample time='57:40 min' depth='6.4 m' stoptime='7:00 min' dc_supplied_ppo2='1.27 bar' />
+  <sample time='57:50 min' depth='6.3 m' dc_supplied_ppo2='1.26 bar' />
+  <sample time='58:00 min' depth='6.3 m' sensor2='1.167 bar' sensor3='1.224 bar' />
+  <sample time='58:10 min' depth='6.4 m' sensor2='1.186 bar' sensor3='1.243 bar' />
+  <sample time='58:20 min' depth='6.4 m' />
+  <sample time='58:30 min' depth='6.4 m' tts='22:00 min' stoptime='6:00 min' sensor2='1.205 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='58:40 min' depth='6.4 m' sensor1='1.339 bar' sensor2='1.262 bar' sensor3='1.32 bar' dc_supplied_ppo2='1.34 bar' />
+  <sample time='58:50 min' depth='6.4 m' sensor1='1.301 bar' sensor2='1.224 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.31 bar' />
+  <sample time='59:00 min' depth='6.4 m' sensor2='1.205 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='59:10 min' depth='6.4 m' />
+  <sample time='59:20 min' depth='6.5 m' temp='17.0 C' cns='27%' sensor2='1.224 bar' sensor3='1.282 bar' dc_supplied_ppo2='1.3 bar' />
+  <sample time='59:30 min' depth='6.5 m' tts='21:00 min' sensor3='1.262 bar' />
+  <sample time='59:40 min' depth='6.7 m' stoptime='5:00 min' sensor3='1.282 bar' />
+  <sample time='59:50 min' depth='6.6 m' />
+  <sample time='60:00 min' depth='6.6 m' />
+  <sample time='60:10 min' depth='6.4 m' sensor3='1.262 bar' />
+  <sample time='60:20 min' depth='6.5 m' sensor3='1.282 bar' />
+  <sample time='60:30 min' depth='6.5 m' tts='20:00 min' stoptime='4:00 min' sensor2='1.205 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='60:40 min' depth='6.5 m' sensor2='1.224 bar' dc_supplied_ppo2='1.3 bar' />
+  <sample time='60:50 min' depth='6.5 m' sensor2='1.205 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='61:00 min' depth='6.5 m' cns='28%' />
+  <sample time='61:10 min' depth='6.5 m' sensor1='1.282 bar' />
+  <sample time='61:20 min' depth='6.5 m' />
+  <sample time='61:30 min' depth='6.5 m' tts='19:00 min' stoptime='3:00 min' sensor1='1.301 bar' />
+  <sample time='61:40 min' depth='6.4 m' />
+  <sample time='61:50 min' depth='6.3 m' sensor1='1.282 bar' />
+  <sample time='62:00 min' depth='6.2 m' sensor3='1.243 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='62:10 min' depth='6.3 m' sensor3='1.262 bar' />
+  <sample time='62:20 min' depth='6.5 m' sensor1='1.301 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='62:30 min' depth='6.3 m' tts='18:00 min' />
+  <sample time='62:40 min' depth='6.3 m' stoptime='2:00 min' sensor1='1.282 bar' sensor2='1.186 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='62:50 min' depth='6.3 m' />
+  <sample time='63:00 min' depth='6.3 m' cns='29%' sensor1='1.262 bar' />
+  <sample time='63:10 min' depth='6.2 m' />
+  <sample time='63:20 min' depth='6.3 m' />
+  <sample time='63:30 min' depth='6.4 m' tts='17:00 min' sensor1='1.282 bar' sensor2='1.205 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='63:40 min' depth='6.4 m' stoptime='1:00 min' />
+  <sample time='63:50 min' depth='6.5 m' sensor3='1.262 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='64:00 min' depth='6.3 m' sensor2='1.186 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='64:10 min' depth='6.3 m' sensor2='1.205 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='64:20 min' depth='6.3 m' sensor2='1.186 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='64:30 min' depth='6.4 m' tts='16:00 min' />
+  <sample time='64:40 min' depth='6.3 m' />
+  <sample time='64:50 min' depth='6.1 m' stoptime='15:00 min' stopdepth='3.0 m' cns='30%' sensor1='1.262 bar' sensor3='1.224 bar' />
+  <sample time='65:00 min' depth='6.2 m' />
+  <sample time='65:10 min' depth='6.1 m' dc_supplied_ppo2='1.26 bar' />
+  <sample time='65:20 min' depth='6.2 m' sensor1='1.282 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='65:30 min' depth='6.2 m' sensor1='1.262 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.26 bar' />
+  <sample time='65:40 min' depth='6.1 m' />
+  <sample time='65:50 min' depth='6.1 m' />
+  <sample time='66:00 min' depth='6.2 m' dc_supplied_ppo2='1.27 bar' />
+  <sample time='66:10 min' depth='6.1 m' tts='15:00 min' stoptime='14:00 min' dc_supplied_ppo2='1.26 bar' />
+  <sample time='66:20 min' depth='6.1 m' />
+  <sample time='66:30 min' depth='6.2 m' />
+  <sample time='66:40 min' depth='6.0 m' cns='31%' sensor2='1.167 bar' dc_supplied_ppo2='1.25 bar' />
+  <sample time='66:50 min' depth='6.1 m' sensor1='1.282 bar' sensor2='1.205 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='67:00 min' depth='6.0 m' sensor1='1.262 bar' sensor2='1.186 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.26 bar' />
+  <sample time='67:10 min' depth='6.0 m' sensor2='1.167 bar' dc_supplied_ppo2='1.25 bar' />
+  <sample time='67:20 min' depth='6.1 m' tts='14:00 min' stoptime='13:00 min' />
+  <sample time='67:30 min' depth='6.0 m' sensor2='1.186 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='67:40 min' depth='6.0 m' sensor1='1.301 bar' sensor2='1.205 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='67:50 min' depth='6.2 m' sensor1='1.282 bar' sensor2='1.186 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='68:00 min' depth='6.0 m' sensor1='1.262 bar' dc_supplied_ppo2='1.26 bar' />
+  <sample time='68:10 min' depth='6.1 m' sensor1='1.282 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='68:20 min' depth='6.4 m' tts='13:00 min' stoptime='12:00 min' sensor2='1.205 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='68:30 min' depth='6.2 m' sensor2='1.186 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='68:40 min' depth='6.2 m' cns='32%' />
+  <sample time='68:50 min' depth='6.3 m' />
+  <sample time='69:00 min' depth='6.2 m' sensor1='1.262 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.26 bar' />
+  <sample time='69:10 min' depth='6.1 m' />
+  <sample time='69:20 min' depth='6.2 m' />
+  <sample time='69:30 min' depth='6.2 m' />
+  <sample time='69:40 min' depth='5.9 m' tts='12:00 min' stoptime='11:00 min' sensor1='1.224 bar' sensor2='1.148 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='69:50 min' depth='6.4 m' sensor1='1.262 bar' sensor2='1.186 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.25 bar' />
+  <sample time='70:00 min' depth='6.5 m' dc_supplied_ppo2='1.26 bar' />
+  <sample time='70:10 min' depth='6.5 m' />
+  <sample time='70:20 min' depth='6.6 m' />
+  <sample time='70:30 min' depth='6.5 m' cns='33%' />
+  <sample time='70:40 min' depth='6.5 m' />
+  <sample time='70:50 min' depth='6.4 m' tts='11:00 min' stoptime='10:00 min' sensor1='1.243 bar' sensor2='1.167 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.25 bar' />
+  <sample time='71:00 min' depth='6.3 m' sensor2='1.148 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='71:10 min' depth='6.3 m' sensor1='1.301 bar' sensor2='1.224 bar' sensor3='1.262 bar' dc_supplied_ppo2='1.3 bar' />
+  <sample time='71:20 min' depth='6.1 m' sensor1='1.243 bar' sensor2='1.167 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.24 bar' />
+  <sample time='71:30 min' depth='6.0 m' />
+  <sample time='71:40 min' depth='6.0 m' dc_supplied_ppo2='1.25 bar' />
+  <sample time='71:50 min' depth='6.0 m' />
+  <sample time='72:00 min' depth='5.9 m' sensor2='1.148 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.24 bar' />
+  <sample time='72:10 min' depth='5.9 m' tts='10:00 min' stoptime='9:00 min' sensor2='1.167 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='72:20 min' depth='6.0 m' sensor1='1.224 bar' sensor2='1.148 bar' />
+  <sample time='72:30 min' depth='5.9 m' cns='34%' sensor1='1.243 bar' />
+  <sample time='72:40 min' depth='5.8 m' sensor1='1.224 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='72:50 min' depth='5.9 m' dc_supplied_ppo2='1.23 bar' />
+  <sample time='73:00 min' depth='5.9 m' dc_supplied_ppo2='1.22 bar' />
+  <sample time='73:10 min' depth='5.8 m' />
+  <sample time='73:20 min' depth='5.9 m' tts='9:00 min' stoptime='8:00 min' />
+  <sample time='73:30 min' depth='5.9 m' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.167 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='73:40 min' depth='5.7 m' sensor3='1.148 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='73:50 min' depth='5.7 m' />
+  <sample time='74:00 min' depth='5.6 m' sensor1='1.224 bar' sensor2='1.148 bar' sensor3='1.167 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='74:10 min' depth='5.6 m' sensor1='1.205 bar' sensor2='1.129 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='74:20 min' depth='5.7 m' />
+  <sample time='74:30 min' depth='5.8 m' sensor1='1.224 bar' sensor2='1.148 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='74:40 min' depth='5.8 m' tts='8:00 min' stoptime='7:00 min' cns='35%' sensor1='1.205 bar' sensor2='1.129 bar' sensor3='1.167 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='74:50 min' depth='5.7 m' />
+  <sample time='75:00 min' depth='5.6 m' sensor1='1.282 bar' sensor2='1.186 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='75:10 min' depth='5.7 m' sensor1='1.243 bar' sensor2='1.167 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='75:20 min' depth='5.8 m' sensor1='1.224 bar' sensor2='1.148 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='75:30 min' depth='5.9 m' sensor1='1.243 bar' sensor2='1.167 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.24 bar' />
+  <sample time='75:40 min' depth='5.8 m' sensor3='1.186 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='75:50 min' depth='5.6 m' tts='7:00 min' stoptime='6:00 min' sensor2='1.148 bar' />
+  <sample time='76:00 min' depth='5.6 m' sensor1='1.224 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='76:10 min' depth='5.6 m' sensor3='1.167 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='76:20 min' depth='5.6 m' sensor3='1.186 bar' />
+  <sample time='76:30 min' depth='5.7 m' sensor3='1.167 bar' />
+  <sample time='76:40 min' depth='5.7 m' cns='36%' sensor3='1.186 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='76:50 min' depth='5.7 m' />
+  <sample time='77:00 min' depth='5.7 m' tts='6:00 min' stoptime='5:00 min' />
+  <sample time='77:10 min' depth='5.7 m' sensor2='1.129 bar' sensor3='1.167 bar' dc_supplied_ppo2='1.2 bar' />
+  <sample time='77:20 min' depth='5.6 m' sensor1='1.205 bar' />
+  <sample time='77:30 min' depth='5.7 m' sensor1='1.224 bar' sensor2='1.148 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='77:40 min' depth='5.8 m' sensor1='1.243 bar' sensor2='1.167 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='77:50 min' depth='5.5 m' dc_supplied_ppo2='1.24 bar' />
+  <sample time='78:00 min' depth='5.5 m' sensor1='1.224 bar' sensor2='1.148 bar' sensor3='1.167 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='78:10 min' depth='5.6 m' sensor1='1.243 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='78:20 min' depth='5.7 m' dc_supplied_ppo2='1.22 bar' />
+  <sample time='78:30 min' depth='5.8 m' tts='5:00 min' stoptime='4:00 min' sensor2='1.167 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='78:40 min' depth='5.8 m' cns='37%' />
+  <sample time='78:50 min' depth='5.7 m' sensor2='1.148 bar' />
+  <sample time='79:00 min' depth='5.8 m' sensor2='1.167 bar' />
+  <sample time='79:10 min' depth='5.7 m' />
+  <sample time='79:20 min' depth='5.6 m' sensor1='1.224 bar' sensor2='1.148 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='79:30 min' depth='5.6 m' tts='4:00 min' stoptime='3:00 min' sensor3='1.167 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='79:40 min' depth='5.8 m' sensor1='1.243 bar' sensor3='1.186 bar' dc_supplied_ppo2='1.23 bar' />
+  <sample time='79:50 min' depth='5.5 m' sensor1='1.224 bar' dc_supplied_ppo2='1.22 bar' />
+  <sample time='80:00 min' depth='5.6 m' />
+  <sample time='80:10 min' depth='6.1 m' sensor1='1.262 bar' sensor2='1.186 bar' sensor3='1.205 bar' dc_supplied_ppo2='1.25 bar' />
+  <sample time='80:20 min' depth='6.3 m' sensor1='1.282 bar' sensor2='1.205 bar' sensor3='1.243 bar' dc_supplied_ppo2='1.28 bar' />
+  <sample time='80:30 min' depth='6.4 m' sensor1='1.301 bar' dc_supplied_ppo2='1.29 bar' />
+  <sample time='80:40 min' depth='6.2 m' tts='3:00 min' stoptime='2:00 min' cns='38%' sensor1='1.282 bar' sensor2='1.186 bar' sensor3='1.224 bar' dc_supplied_ppo2='1.27 bar' />
+  <sample time='80:50 min' depth='5.5 m' sensor1='1.224 bar' sensor2='1.148 bar' sensor3='1.167 bar' dc_supplied_ppo2='1.21 bar' />
+  <sample time='81:00 min' depth='5.3 m' sensor1='1.205 bar' sensor2='1.109 bar' sensor3='1.148 bar' dc_supplied_ppo2='1.19 bar' />
+  <sample time='81:10 min' depth='5.1 m' sensor1='1.186 bar' sensor3='1.129 bar' dc_supplied_ppo2='1.17 bar' />
+  <sample time='81:20 min' depth='5.0 m' sensor1='1.167 bar' sensor2='1.09 bar' sensor3='1.109 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='81:30 min' depth='4.7 m' sensor1='1.148 bar' sensor2='1.071 bar' sensor3='1.09 bar' dc_supplied_ppo2='1.14 bar' />
+  <sample time='81:40 min' depth='4.6 m' dc_supplied_ppo2='1.13 bar' />
+  <sample time='81:50 min' depth='4.6 m' sensor1='1.129 bar' sensor2='1.052 bar' sensor3='1.071 bar' dc_supplied_ppo2='1.11 bar' />
+  <sample time='82:00 min' depth='4.5 m' />
+  <sample time='82:10 min' depth='4.5 m' sensor1='1.109 bar' sensor2='1.033 bar' dc_supplied_ppo2='1.1 bar' />
+  <sample time='82:20 min' depth='4.3 m' tts='2:00 min' stoptime='1:00 min' sensor1='1.09 bar' sensor3='1.052 bar' dc_supplied_ppo2='1.09 bar' />
+  <sample time='82:30 min' depth='4.1 m' sensor1='1.109 bar' sensor2='1.052 bar' sensor3='1.071 bar' dc_supplied_ppo2='1.11 bar' />
+  <sample time='82:40 min' depth='4.0 m' sensor1='1.148 bar' sensor2='1.071 bar' sensor3='1.09 bar' dc_supplied_ppo2='1.14 bar' />
+  <sample time='82:50 min' depth='3.9 m' cns='39%' sensor1='1.09 bar' sensor2='1.014 bar' sensor3='1.033 bar' dc_supplied_ppo2='1.08 bar' />
+  <sample time='83:00 min' depth='3.9 m' sensor2='1.033 bar' sensor3='1.052 bar' dc_supplied_ppo2='1.09 bar' />
+  <sample time='83:10 min' depth='3.9 m' sensor1='1.167 bar' sensor2='1.109 bar' sensor3='1.129 bar' dc_supplied_ppo2='1.16 bar' />
+  <sample time='83:20 min' depth='3.7 m' sensor2='1.09 bar' sensor3='1.109 bar' dc_supplied_ppo2='1.15 bar' />
+  <sample time='83:30 min' depth='3.6 m' ndl='99:00 min' tts='1:00 min' in_deco='0' stopdepth='0.0 m' sensor1='1.109 bar' sensor2='1.033 bar' sensor3='1.052 bar' dc_supplied_ppo2='1.1 bar' />
+  <sample time='83:40 min' depth='3.4 m' sensor1='1.09 bar' sensor3='1.033 bar' dc_supplied_ppo2='1.09 bar' />
+  <sample time='83:50 min' depth='3.2 m' sensor2='1.014 bar' dc_supplied_ppo2='1.08 bar' />
+  <sample time='84:00 min' depth='3.0 m' sensor1='1.071 bar' sensor2='0.995 bar' sensor3='1.014 bar' dc_supplied_ppo2='1.06 bar' />
+  <sample time='84:10 min' depth='2.9 m' sensor1='1.052 bar' sensor2='0.975 bar' sensor3='0.995 bar' dc_supplied_ppo2='1.04 bar' />
+  <sample time='84:20 min' depth='2.8 m' sensor1='1.033 bar' sensor3='0.975 bar' dc_supplied_ppo2='1.03 bar' />
+  <sample time='84:30 min' depth='2.7 m' temp='18.0 C' sensor2='0.956 bar' dc_supplied_ppo2='1.02 bar' />
+  <sample time='84:40 min' depth='2.5 m' sensor1='1.014 bar' sensor3='0.956 bar' dc_supplied_ppo2='1.01 bar' />
+  <sample time='84:50 min' depth='2.1 m' sensor1='0.995 bar' sensor2='0.918 bar' sensor3='0.937 bar' dc_supplied_ppo2='0.98 bar' />
+  <sample time='85:00 min' depth='2.0 m' sensor3='0.918 bar' dc_supplied_ppo2='0.97 bar' />
+  <sample time='85:10 min' depth='1.7 m' sensor1='0.956 bar' sensor2='0.899 bar' sensor3='0.899 bar' dc_supplied_ppo2='0.95 bar' />
+  <sample time='85:20 min' depth='1.4 m' sensor1='0.937 bar' sensor2='0.88 bar' sensor3='0.88 bar' dc_supplied_ppo2='0.93 bar' />
+  <sample time='85:30 min' depth='0.0 m' sensor1='0.899 bar' sensor2='0.842 bar' sensor3='0.842 bar' dc_supplied_ppo2='0.89 bar' />
+  <sample time='85:40 min' depth='0.0 m' cns='40%' sensor1='0.842 bar' sensor2='0.784 bar' sensor3='0.784 bar' dc_supplied_ppo2='0.83 bar' />
+  <sample time='85:50 min' depth='0.0 m' tts='0:00 min' dc_supplied_ppo2='0.82 bar' />
+  <sample time='86:00 min' depth='0.0 m' sensor1='0.822 bar' sensor3='0.765 bar' dc_supplied_ppo2='0.81 bar' />
+  <sample time='86:10 min' depth='0.0 m' sensor2='0.765 bar' />
+  <sample time='86:20 min' depth='0.0 m' />
+  </divecomputer>
+</dive>
+</dives>
+</divelog>

@@ -23,6 +23,9 @@ class DiveSample:
     gtr: Optional[int] = None  # Gas Time Remaining in seconds
     ppo2: Optional[float] = None  # Partial Pressure of Oxygen in bar
     cns: Optional[int] = None  # Central Nervous System Oxygen Toxicity in %
+    sensor1: Optional[float] = None  # Sensor 1 pressure in bar
+    sensor2: Optional[float] = None  # Sensor 2 pressure in bar
+    sensor3: Optional[float] = None  # Sensor 3 pressure in bar
 
 class DiveLogError(Exception):
     """Base exception for dive log parsing errors."""
@@ -101,6 +104,9 @@ class SubsurfaceParser(DiveParser):
             ndl=99, # Start value for Shearwater
             cns=0, # TODO implement
             ppo2=None, # TODO implement
+            sensor1=None, # MH
+            sensor2=None, # MH
+            sensor3=None, # MH
         )
         # Initialize pressures list length based on cylinders (if any)
         if cylinders:
@@ -124,6 +130,14 @@ class SubsurfaceParser(DiveParser):
                 last_values.stop_depth = float(attrs["stopdepth"].replace(" m", ""))
             if "stoptime" in attrs:
                 last_values.stop_time = int(attrs["stoptime"].replace(" min", "").split(":")[0])
+            if "dc_supplied_ppo2" in attrs:
+                last_values.ppo2 = float(attrs["dc_supplied_ppo2"].replace(" bar", ""))
+            if "sensor1" in attrs:
+                last_values.sensor1 = float(attrs["sensor1"].replace(" bar", ""))
+            if "sensor2" in attrs:
+                last_values.sensor2 = float(attrs["sensor2"].replace(" bar", ""))
+            if "sensor3" in attrs:
+                last_values.sensor3 = float(attrs["sensor3"].replace(" bar", ""))
 
             # Update tank pressures
             for i in range(len(cylinders)):
@@ -263,6 +277,12 @@ class ShearwaterParser(DiveParser):
             if he_elem is not None and he_elem.text is not None:
                 try:
                     last_values.fractionHe = float(he_elem.text)
+                except ValueError:
+                    pass
+            ppo2_elem = record.find("averagePPO2")
+            if ppo2_elem is not None and ppo2_elem.text is not None:
+                try:
+                    last_values.ppo2 = float(ppo2_elem.text)
                 except ValueError:
                     pass
 

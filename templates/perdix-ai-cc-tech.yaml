@@ -1,0 +1,93 @@
+template_name: perdix-ai-cc-tech
+width: 750
+height: 600
+background_color: "#3c3c3c"
+background_image: "templates/perdix.png"
+chroma_color: "#00FF00"  # bright green used where PNG is transparent
+
+default_label_font:
+  name: "Arial Bold"
+  size: 20
+  color: "#00BAEF"
+
+default_data_font:
+  name: "Arial Bold"
+  size: 42
+  color: "#FFFFFF"
+
+items:
+  # Top row
+  - type: data
+    field: depth
+    label: "DEPTH"
+    label_position: { x: 180, y: 200 }
+    data_position:  { x: 180, y: 220 }
+    precision: 1
+
+  - type: data
+    field: time
+    label: "TIME"
+    label_position: { x: 270, y: 200 }
+    data_position:  { x: 270, y: 220 }
+
+  - type: data
+    field: stop_depth
+    label: "STOP"
+    label_position: { x: 410, y: 200 }
+    data_position:  { x: 410, y: 220 }
+    precision: 0
+
+  - type: data
+    field: stop_time
+    label: "TIME"
+    label_position: { x: 470, y: 200 }
+    data_position:  { x: 470, y: 220 }
+    precision: 0
+
+  # Middle row
+  - type: data
+    field: sensor1
+    label: "PPO2"
+    label_position: { x: 180, y: 290 }
+    data_position:  { x: 180, y: 310 }
+    precision: 2
+
+  - type: data
+    field: sensor2
+    label: ""
+    label_position: { x: 300, y: 290 }
+    data_position:  { x: 300, y: 310 }
+    precision: 2
+
+  - type: data
+    field: sensor3
+    label: ""
+    label_position: { x: 450, y: 290 }
+    data_position:  { x: 450, y: 310 }
+    precision: 2
+
+  # Bottom row
+  - type: text
+    text: "CC"
+    position: { x: 180, y: 400 }
+    font: { name: "Arial Bold", size: 42, color: "#FFFFFF" }
+
+  - type: data
+    compute: "{fractionO2:02%}/{fractionHe:02%}"
+    label: "O2/HE"
+    label_position: { x: 260, y: 380 }
+    data_position:  { x: 260, y: 400 }
+
+  - type: data
+    field: ndl
+    label: "NDL"
+    label_position: { x: 410, y: 380 }
+    data_position:  { x: 410, y: 400 }
+    precision: 0
+
+  - type: data
+    field: tts
+    label: "TTS"
+    label_position: { x: 470, y: 380 }
+    data_position:  { x: 470, y: 400 }
+    precision: 0

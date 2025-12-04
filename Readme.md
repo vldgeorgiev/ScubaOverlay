@@ -57,35 +57,46 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 
 #### Windows
 
-1. Download `scuba-overlay-windows.exe` from the latest release
-2. Open Command Prompt and run:
+1. Download `scuba-overlay-vX.X.X-windows-x64.zip` from the latest release
+2. Extract the zip file to a folder (e.g., `Downloads`)
+3. Open Command Prompt, navigate to the extracted folder, and run:
 
    ```bat
-   scuba-overlay-windows.exe --template templates\perdix-ai-oc-tech.yaml --test-template
+   cd Downloads\scuba-overlay
+   scuba-overlay.exe --template templates\perdix-ai-oc-tech.yaml --test-template
    ```
    
    **Note:** Windows may show a security warning since the binary isn't code-signed. Click "More info" → "Run anyway" to proceed.
 
 #### macOS
 
-1. Download `scuba-overlay-macos` from the latest release
-2. Make it executable and run:
+**Choose the correct version for your Mac:**
+- **Intel Macs**: Download `scuba-overlay-vX.X.X-macos-intel.zip`
+- **Apple Silicon (M1/M2/M3)**: Download `scuba-overlay-vX.X.X-macos-apple-silicon.zip`
+
+Not sure which Mac you have? Go to **Apple menu** → **About This Mac** and check the **Chip** or **Processor** line.
+
+1. Download the appropriate zip file from the latest release
+2. Extract the zip file to a folder
+3. Open Terminal, navigate to the extracted folder, and run:
 
    ```bash
-   chmod +x scuba-overlay-macos
-   ./scuba-overlay-macos --template templates/perdix-ai-oc-tech.yaml --test-template
+   cd ~/Downloads/scuba-overlay
+   ./scuba-overlay --template templates/perdix-ai-oc-tech.yaml --test-template
    ```
    
-   **Note:** macOS may block unsigned binaries. Go to **System Settings** → **Privacy & Security** → click "Open Anyway" if prompted.
+   **Note:** macOS may block unsigned binaries. If you see a security warning, right-click the `scuba-overlay` executable and choose **Open**, then click **Open** in the dialog. You only need to do this once.
 
 #### Linux
 
-1. Download `scuba-overlay-linux` from the latest release
-2. Make it executable and run:
+1. Download `scuba-overlay-vX.X.X-linux-x64.zip` from the latest release
+2. Extract the zip file to a folder
+3. Open a terminal, navigate to the extracted folder, and run:
 
    ```bash
-   chmod +x scuba-overlay-linux
-   ./scuba-overlay-linux --template templates/perdix-ai-oc-tech.yaml --test-template
+   cd ~/Downloads/scuba-overlay
+   chmod +x scuba-overlay
+   ./scuba-overlay --template templates/perdix-ai-oc-tech.yaml --test-template
    ```
 
 ### Option 2: Install from Source with Python

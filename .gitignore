@@ -33,6 +33,7 @@ build/
 dist/
 *.egg-info/
 *.spec
+!scuba-overlay.spec
 
 # IDEs
 .idea/

@@ -13,11 +13,14 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            artifact_name: scuba-overlay.exe
+            artifact_name: scuba-overlay
             asset_name: scuba-overlay-${{ github.ref_name }}-windows-x64
+          - os: macos-13
+            artifact_name: scuba-overlay
+            asset_name: scuba-overlay-${{ github.ref_name }}-macos-intel
           - os: macos-latest
             artifact_name: scuba-overlay
-            asset_name: scuba-overlay-${{ github.ref_name }}-macos-x64
+            asset_name: scuba-overlay-${{ github.ref_name }}-macos-apple-silicon
           - os: ubuntu-latest
             artifact_name: scuba-overlay
             asset_name: scuba-overlay-${{ github.ref_name }}-linux-x64
@@ -39,24 +42,29 @@ jobs:
           pip install .
           pip install pyinstaller>=6.0
 
-      - name: Build with PyInstaller (Windows)
-        if: runner.os == 'Windows'
+      - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile --name scuba-overlay --add-data "templates;templates" main.py
+          pyinstaller scuba-overlay.spec
 
-      - name: Build with PyInstaller (macOS/Linux)
+      - name: Copy templates to root (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          cp -r templates dist/scuba-overlay/
+
+      - name: Copy templates to root (Unix)
         if: runner.os != 'Windows'
         run: |
-          pyinstaller --onefile --name scuba-overlay --add-data "templates:templates" main.py
+          cp -r templates dist/scuba-overlay/
 
       - name: Create release archive
         shell: bash
         run: |
           cd dist
           if [ "${{ runner.os }}" == "Windows" ]; then
-            7z a ../${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}
+            7z a ../${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}/
           else
-            zip ../${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}
+            zip -r ../${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}/
           fi
 
       - name: Upload artifact

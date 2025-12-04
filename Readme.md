@@ -52,33 +52,43 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 ## 🚀 Installation
 
 ### Requirements
-- Python **3.11+**
+- Python **3.13+**
 - `pip` (comes with most Python installations)
 
 ### Install on Windows
-1. Download Python from [python.org](https://www.python.org) and check **"Add Python to PATH"** during setup.
+1. Download Python 3.13+ from [python.org](https://www.python.org) and check **"Add Python to PATH"** during setup.
 2. Open **Command Prompt** and navigate to the project folder:
    ```bat
    cd C:\Users\YOU\ScubaOverlay
    ```
-3. Install dependencies:
+3. Install the package:
    ```bat
-   pip install -r requirements.txt
+   pip install .
+   ```
+   
+   For development (editable mode):
+   ```bat
+   pip install -e .
    ```
 
 ### Install on macOS / Linux
-1. Check Python version:
+1. Check Python version (must be 3.13+):
    ```bash
    python3 --version
    ```
-   If missing, install via:
+   If missing or outdated, install via:
    ```bash
-   brew install python    # macOS
-   sudo apt install python3-pip  # Debian/Ubuntu
+   brew install python@3.13    # macOS
+   sudo apt install python3.13 python3.13-pip  # Debian/Ubuntu
    ```
-2. Install dependencies:
+2. Install the package:
    ```bash
-   pip install -r requirements.txt
+   pip install .
+   ```
+   
+   For development (editable mode):
+   ```bash
+   pip install -e .
    ```
 
 ---
@@ -87,18 +97,20 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 
 ### 1. Preview Your Layout
 ```bash
-python main.py --template templates/perdix-ai-oc-tech.yaml --test-template
+scuba-overlay --template templates/perdix-ai-oc-tech.yaml --test-template
 ```
 Generates `test_template.png` for fast iteration.
+
+*Note: You can also use `python main.py` if you haven't installed the package.*
 
 ### 2. Generate Overlay Video
 Metric units:
 ```bash
-python main.py --template templates/perdix-ai-oc-tech.yaml --log samples/dive446.ssrf --output overlay.mp4
+scuba-overlay --template templates/perdix-ai-oc-tech.yaml --log samples/dive446.ssrf --output overlay.mp4
 ```
 Imperial units:
 ```bash
-python main.py --template templates/perdix-ai-oc-tech.yaml --log samples/dive446.ssrf --units imperial --output overlay_imperial.mp4
+scuba-overlay --template templates/perdix-ai-oc-tech.yaml --log samples/dive446.ssrf --units imperial --output overlay_imperial.mp4
 ```
 
 ---
@@ -168,7 +180,7 @@ For **complete template documentation** with examples and field reference, see:
 ### Quick Template Testing
 
 ```bash
-python main.py --template your_template.yaml --test-template
+scuba-overlay --template your_template.yaml --test-template
 ```
 
 This generates a single PNG preview so you can iterate on your layout quickly.

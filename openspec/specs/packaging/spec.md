@@ -99,14 +99,13 @@ The system SHALL include complete project metadata for discoverability and poten
 - **AND** version field is defined (semantic versioning)
 - **AND** description field describes the project purpose
 - **AND** readme field points to "Readme.md"
-- **AND** license field specifies MIT
+- **AND** license field specifies GPL-3.0-or-later
 - **AND** requires-python field specifies ">=3.13"
 
 #### Scenario: PyPI classifiers included
 - **GIVEN** pyproject.toml file
 - **WHEN** user inspects `[project] classifiers`
 - **THEN** Python version classifiers include 3.13
-- **AND** License classifier matches MIT
 - **AND** Topic classifiers include Multimedia/Video
 - **AND** Development Status is appropriate
 
@@ -143,6 +142,22 @@ The system SHALL NOT include a requirements.txt file; all dependencies SHALL be 
 - **THEN** instructions use `pip install .` command
 - **AND** no reference to requirements.txt exists
 - **AND** Python 3.13+ requirement is clearly stated
+
+### Requirement: Optional Build Dependencies
+
+The system SHALL support optional dependency groups for development and build tooling.
+
+#### Scenario: Build dependencies group
+- **GIVEN** pyproject.toml file
+- **WHEN** user inspects `[project.optional-dependencies]`
+- **THEN** a `build` group exists for build tooling
+- **AND** developers can install with `pip install .[build]`
+
+#### Scenario: Dev dependencies group
+- **GIVEN** pyproject.toml file
+- **WHEN** user inspects `[project.optional-dependencies]`
+- **THEN** a `dev` group exists (may be empty initially)
+- **AND** structure supports future testing/linting tools
 
 ### Requirement: Updated Documentation
 

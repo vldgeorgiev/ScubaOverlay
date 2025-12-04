@@ -1,0 +1,91 @@
+name: Build Binaries
+
+on:
+  workflow_dispatch:  # Manual trigger for testing
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v0.1.0, v1.2.3
+
+jobs:
+  build:
+    name: Build ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: scuba-overlay.exe
+            asset_name: scuba-overlay-${{ github.ref_name }}-windows-x64
+          - os: macos-latest
+            artifact_name: scuba-overlay
+            asset_name: scuba-overlay-${{ github.ref_name }}-macos-x64
+          - os: ubuntu-latest
+            artifact_name: scuba-overlay
+            asset_name: scuba-overlay-${{ github.ref_name }}-linux-x64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install .
+          pip install pyinstaller>=6.0
+
+      - name: Build with PyInstaller (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          pyinstaller --onefile --name scuba-overlay --add-data "templates;templates" main.py
+
+      - name: Build with PyInstaller (macOS/Linux)
+        if: runner.os != 'Windows'
+        run: |
+          pyinstaller --onefile --name scuba-overlay --add-data "templates:templates" main.py
+
+      - name: Create release archive
+        shell: bash
+        run: |
+          cd dist
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            7z a ../${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}
+          else
+            zip ../${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ matrix.asset_name }}.zip
+          if-no-files-found: error
+
+  release:
+    name: Create Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*/*
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'rc') || contains(github.ref, 'alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

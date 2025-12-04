@@ -29,6 +29,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = []
+build = ["pyinstaller>=6.0"]
 
 [project.scripts]
 scuba-overlay = "main:main"

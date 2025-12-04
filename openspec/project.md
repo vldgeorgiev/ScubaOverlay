@@ -15,6 +15,13 @@ The project aims to support multiple dive log formats (Subsurface .ssrf and Shea
 - **XML parsing** (xml.etree.ElementTree) - dive log parsing
 - **PEP 621 pyproject.toml** - modern package configuration
 
+## Distribution
+
+- **pip installation**: Standard Python package installation via `pip install .`
+- **Standalone binaries**: Cross-platform executables built with PyInstaller (Windows, macOS, Linux)
+- **GitHub Releases**: Automated binary builds via GitHub Actions on version tags
+- **No Python required**: End users can download and run binaries without Python installation
+
 ## Project Conventions
 
 ### Code Style
@@ -43,6 +50,8 @@ The project aims to support multiple dive log formats (Subsurface .ssrf and Shea
   - `utils.py` - shared utilities
 - **Compiled template optimization**: Pre-process templates into `_CompiledTemplate` objects to avoid repeated work during video generation
 - **Unit conversion**: Internal canonical units (meters, bar, Celsius) with runtime conversion to imperial units when requested
+- **Automated builds**: GitHub Actions workflow for multi-platform binary builds using PyInstaller
+- **Matrix builds**: Parallel CI jobs for Windows, macOS, and Linux platforms
 
 ### Testing Strategy
 
@@ -50,12 +59,15 @@ The project aims to support multiple dive log formats (Subsurface .ssrf and Shea
 - Manual testing via `--test-template` flag for quick layout validation
 - Sample dive logs provided in `samples/` directory for integration testing
 - `.gitignore` includes pytest-related entries suggesting future test infrastructure
+- **CI/CD testing**: Automated binary builds tested on Windows, macOS, and Linux via GitHub Actions
 
 ### Git Workflow
 
 - Standard `.gitignore` for Python projects (excludes `__pycache__`, venv, `.pyc`, etc.)
 - Ignores macOS `.DS_Store` files
-- No explicit branching strategy documented
+- **Release process**: Version tags (`v*.*.*`) trigger automated binary builds via GitHub Actions
+- **Semantic versioning**: Tags follow `vMAJOR.MINOR.PATCH` format
+- **GitHub Releases**: Automated release creation with binary artifacts for download
 
 ## Domain Context
 
@@ -96,9 +108,17 @@ The project aims to support multiple dive log formats (Subsurface .ssrf and Shea
 
 ## External Dependencies
 
+### Runtime Dependencies
+
 - **opencv-python**: Core video encoding/frame generation
 - **Pillow**: Image manipulation and text rendering
 - **pyyaml**: YAML template parsing
 - All dependencies are Python packages installable via pip (no external services or APIs)
 - Font files expected to be system-installed (no bundled fonts)
+
+### Build Dependencies
+
+- **PyInstaller**: Creates standalone executables for distribution
+- **GitHub Actions**: CI/CD platform for automated builds (Windows, macOS, Linux runners)
+- Build dependencies are optional and only needed for creating binary releases
 

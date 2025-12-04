@@ -51,42 +51,94 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 
 ## 🚀 Installation
 
-### Requirements
+### Option 1: Download Standalone Binary (Recommended)
+
+**No Python installation required!** Download pre-built executables from the [Releases page](https://github.com/vldgeorgiev/ScubaOverlay/releases).
+
+#### Windows
+
+1. Download `scuba-overlay-windows.exe` from the latest release
+2. Open Command Prompt and run:
+
+   ```bat
+   scuba-overlay-windows.exe --template templates\perdix-ai-oc-tech.yaml --test-template
+   ```
+   
+   **Note:** Windows may show a security warning since the binary isn't code-signed. Click "More info" → "Run anyway" to proceed.
+
+#### macOS
+
+1. Download `scuba-overlay-macos` from the latest release
+2. Make it executable and run:
+
+   ```bash
+   chmod +x scuba-overlay-macos
+   ./scuba-overlay-macos --template templates/perdix-ai-oc-tech.yaml --test-template
+   ```
+   
+   **Note:** macOS may block unsigned binaries. Go to **System Settings** → **Privacy & Security** → click "Open Anyway" if prompted.
+
+#### Linux
+
+1. Download `scuba-overlay-linux` from the latest release
+2. Make it executable and run:
+
+   ```bash
+   chmod +x scuba-overlay-linux
+   ./scuba-overlay-linux --template templates/perdix-ai-oc-tech.yaml --test-template
+   ```
+
+### Option 2: Install from Source with Python
+
+#### Requirements
+
 - Python **3.13+**
 - `pip` (comes with most Python installations)
 
-### Install on Windows
+#### Install on Windows
+
 1. Download Python 3.13+ from [python.org](https://www.python.org) and check **"Add Python to PATH"** during setup.
 2. Open **Command Prompt** and navigate to the project folder:
+
    ```bat
    cd C:\Users\YOU\ScubaOverlay
    ```
+
 3. Install the package:
+
    ```bat
    pip install .
    ```
    
    For development (editable mode):
+
    ```bat
    pip install -e .
    ```
 
-### Install on macOS / Linux
+#### Install on macOS / Linux
+
 1. Check Python version (must be 3.13+):
+
    ```bash
    python3 --version
    ```
+
    If missing or outdated, install via:
+
    ```bash
    brew install python@3.13    # macOS
    sudo apt install python3.13 python3.13-pip  # Debian/Ubuntu
    ```
+
 2. Install the package:
+
    ```bash
    pip install .
    ```
    
    For development (editable mode):
+
    ```bash
    pip install -e .
    ```

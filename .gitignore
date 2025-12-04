@@ -32,6 +32,7 @@ pytest_cache/
 build/
 dist/
 *.egg-info/
+*.spec
 
 # IDEs
 .idea/

@@ -32,7 +32,11 @@ dev = []
 build = ["pyinstaller>=6.0"]
 
 [project.scripts]
-scuba-overlay = "main:main"
+scuba-overlay = "src.main:main"
 
 [tool.setuptools]
-py-modules = ["main", "parser", "template", "overlay", "font_utils", "utils", "simpilfont"]
+packages = []
+py-modules = []
+
+[tool.setuptools.package-dir]
+"" = "."

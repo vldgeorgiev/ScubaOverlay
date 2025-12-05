@@ -43,7 +43,7 @@ jobs:
 
       - name: Build with PyInstaller
         run: |
-          pyinstaller scuba-overlay.spec
+          pyinstaller pyinstaller.spec
 
       - name: Copy templates to root
         shell: bash

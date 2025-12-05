@@ -39,21 +39,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install .
-          pip install pyinstaller>=6.0
+          pip install .[build]
 
       - name: Build with PyInstaller
         run: |
           pyinstaller scuba-overlay.spec
 
-      - name: Copy templates to root (Windows)
-        if: runner.os == 'Windows'
+      - name: Copy templates to root
         shell: bash
-        run: |
-          cp -r templates dist/scuba-overlay/
-
-      - name: Copy templates to root (Unix)
-        if: runner.os != 'Windows'
         run: |
           cp -r templates dist/scuba-overlay/
 

@@ -78,14 +78,20 @@ Not sure which Mac you have? Go to **Apple menu** → **About This Mac** and che
 
 1. Download the appropriate zip file from the latest release
 2. Extract the zip file to a folder
-3. Open Terminal, navigate to the extracted folder, and run:
+3. **macOS only**: The application is not signed and Macos Gatekeeper will stop it from running. To be able to run, remove quarantine attribute to prevent errors:
+
+   ```bash
+   xattr -dr com.apple.quarantine ~/Downloads/scuba-overlay
+   ```
+   
+   **Note:** First run on macOS may take 30-45 seconds due to Gatekeeper verification. Subsequent runs will be instant.
+
+4. Open Terminal, navigate to the extracted folder, and run:
 
    ```bash
    cd ~/Downloads/scuba-overlay
    ./scuba-overlay --template templates/perdix-ai-oc-tech.yaml --test-template
    ```
-   
-   **Note:** macOS may block unsigned binaries. If you see a security warning, right-click the `scuba-overlay` executable and choose **Open**, then click **Open** in the dialog. You only need to do this once.
 
 #### Linux
 

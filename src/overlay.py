@@ -312,7 +312,7 @@ def evaluate_compute_expression(compute_expr: str, data: DiveSample) -> Optional
     return result
 
 
-def generate_overlay_video(dive_samples: List[DiveSample], template: Dict[str, Any], output_path: str, resolution=(480, 280), duration=None, fps=30, units_override: Optional[Dict[str, str]] = None):
+def generate_overlay_video(dive_samples: List[DiveSample], template: Dict[str, Any], output_path: str, resolution=(480, 280), duration=None, fps=30, units_override: Optional[Dict[str, str]] = None, time_offset: int = 0):
     fourcc_func = getattr(cv2, "VideoWriter_fourcc", None)
     fourcc = fourcc_func(*'mp4v') if fourcc_func else 0
     out = cv2.VideoWriter(output_path, fourcc, fps, resolution)
@@ -332,8 +332,9 @@ def generate_overlay_video(dive_samples: List[DiveSample], template: Dict[str, A
     progress_step = max(1, total_seconds // 10)
 
     for sec in range(total_seconds):
-        # Advance sample pointer to latest sample <= current second
-        while idx + 1 < len(dive_samples) and dive_samples[idx + 1].time <= sec:
+        # Advance sample pointer to latest sample <= current dive time
+        dive_time = sec + time_offset
+        while idx + 1 < len(dive_samples) and dive_samples[idx + 1].time <= dive_time:
             idx += 1
         sample = dive_samples[idx] if dive_samples else None
         if sample is None:

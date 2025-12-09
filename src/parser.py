@@ -3,7 +3,9 @@ import xml.etree.ElementTree as ET
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
+from datetime import datetime, timezone, timedelta
 import copy
+from video_segment_errors import SegmentOutOfBoundsError, EmptySegmentError
 
 
 @dataclass
@@ -26,6 +28,14 @@ class DiveSample:
     sensor1: Optional[float] = None  # Sensor 1 pressure in bar
     sensor2: Optional[float] = None  # Sensor 2 pressure in bar
     sensor3: Optional[float] = None  # Sensor 3 pressure in bar
+
+
+@dataclass
+class DiveData:
+    """Complete dive data including samples and metadata."""
+    samples: List[DiveSample]
+    start_time: datetime  # Dive start time in UTC
+    end_time: datetime  # Dive end time in UTC
 
 class DiveLogError(Exception):
     """Base exception for dive log parsing errors."""
@@ -55,8 +65,81 @@ class DiveParser(ABC):
     """Base class for dive log parsers."""
 
     @abstractmethod
-    def parse(self, file_path: str) -> List[DiveSample]:
+    def parse(self, file_path: str) -> DiveData:
         pass
+
+
+def extract_dive_segment(
+    dive_data: DiveData,
+    segment_start: int,
+    segment_end: int
+) -> List[DiveSample]:
+    """Extract dive samples for a specific time segment.
+
+    Includes boundary samples before/after segment for smooth interpolation.
+    Preserves actual dive times (does not normalize to 0).
+
+    Args:
+        dive_data: Complete dive data with samples
+        segment_start: Start time in seconds from dive start
+        segment_end: End time in seconds from dive start
+
+    Returns:
+        List of dive samples within the segment (plus boundary samples) with original times preserved
+
+    Raises:
+        SegmentOutOfBoundsError: If segment is completely outside dive bounds
+        EmptySegmentError: If no samples found in the specified segment
+    """
+    samples = dive_data.samples
+
+    if not samples:
+        raise EmptySegmentError(segment_start, segment_end, 0)
+
+    dive_duration = int(samples[-1].time)
+
+    # Check if segment is completely out of bounds
+    if segment_start >= dive_duration:
+        raise SegmentOutOfBoundsError(segment_start, segment_end, dive_duration)
+
+    # Warn but allow if segment extends beyond dive end (will be trimmed)
+    if segment_end > dive_duration:
+        print(f"⚠️  Warning: Segment extends beyond dive end ({segment_end}s > {dive_duration}s)")
+        print(f"   Segment will be trimmed to dive duration")
+        segment_end = dive_duration
+
+    # Warn if segment starts before dive (will be adjusted)
+    if segment_start < 0:
+        print(f"⚠️  Warning: Segment starts before dive begins ({segment_start}s < 0s)")
+        print(f"   Segment start will be adjusted to 0s")
+        segment_start = 0
+
+    # Find samples within segment
+    segment_samples = []
+
+    # Include one sample before segment for interpolation
+    for i, sample in enumerate(samples):
+        if sample.time >= segment_start:
+            if i > 0:
+                segment_samples.append(samples[i-1])
+            break
+
+    # Include all samples within segment
+    for sample in samples:
+        if segment_start <= sample.time <= segment_end:
+            segment_samples.append(sample)
+
+    # Include one sample after segment for interpolation
+    for sample in samples:
+        if sample.time > segment_end:
+            segment_samples.append(sample)
+            break
+
+    # Validate we got samples
+    if not segment_samples:
+        raise EmptySegmentError(segment_start, segment_end, len(samples))
+
+    return segment_samples
 
 
 def _parse_time_to_seconds(t: str | None) -> int:
@@ -74,7 +157,7 @@ def _parse_time_to_seconds(t: str | None) -> int:
 class SubsurfaceParser(DiveParser):
     """Parser for Subsurface (.ssrf) XML dive logs."""
 
-    def parse(self, file_path: str) -> List[DiveSample]:
+    def parse(self, file_path: str) -> DiveData:
         tree = ET.parse(file_path)
         root = tree.getroot()
 
@@ -84,6 +167,22 @@ class SubsurfaceParser(DiveParser):
         if len(dives) > 1:
             raise MultipleDivesError(len(dives))
         dive = dives[0]
+
+        # Extract dive start time from date and time attributes
+        date_str = dive.get("date", "")  # Format: YYYY-MM-DD
+        time_str = dive.get("time", "")  # Format: HH:MM:SS
+
+        if not date_str or not time_str:
+            raise NoDiveDataError("Dive date or time not found in dive log")
+
+        # Parse dive start time
+        datetime_str = f"{date_str} {time_str}"
+        try:
+            start_time = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+            # Assume dive computer time is in UTC (or local time zone - user will adjust via offset detection)
+            start_time = start_time.replace(tzinfo=timezone.utc)
+        except ValueError as e:
+            raise NoDiveDataError(f"Could not parse dive date/time: {e}")
 
         cylinders = dive.findall("cylinder")
 
@@ -192,13 +291,22 @@ class SubsurfaceParser(DiveParser):
         print(f"Found {len(gas_changes)} gas change events.")
         print(f"Parsed {len(profile_data)} samples from dive log.")
         print("Sample data:", profile_data[:3])  # Print first 3 samples for debugging
-        return profile_data
+
+        # Calculate dive end time
+        last_sample_time = profile_data[-1].time if profile_data else 0
+        end_time = start_time + timedelta(seconds=last_sample_time)
+
+        return DiveData(
+            samples=profile_data,
+            start_time=start_time,
+            end_time=end_time
+        )
 
 
 class ShearwaterParser(DiveParser):
     """Parser for Shearwater XML dive logs."""
 
-    def parse(self, file_path: str) -> List[DiveSample]:
+    def parse(self, file_path: str) -> DiveData:
         # Handle encoding issues with Shearwater XML files
         try:
             tree = ET.parse(file_path)
@@ -211,6 +319,22 @@ class ShearwaterParser(DiveParser):
             tree = ET.fromstring(content)
 
         root = tree if isinstance(tree, ET.Element) else tree.getroot()
+
+        # Extract dive start time from startDate element
+        dive_log = root.find(".//diveLog")
+        if dive_log is None:
+            raise NoDiveDataError("No dive log data found")
+
+        start_date_elem = dive_log.find("startDate")
+        if start_date_elem is None or not start_date_elem.text:
+            raise NoDiveDataError("Dive start date not found in dive log")
+
+        # Parse Shearwater date format: "4/6/2024 11:58:49 AM"
+        try:
+            start_time = datetime.strptime(start_date_elem.text, "%m/%d/%Y %I:%M:%S %p")
+            start_time = start_time.replace(tzinfo=timezone.utc)
+        except ValueError as e:
+            raise NoDiveDataError(f"Could not parse dive start date: {e}")
 
         # Find dive log records
         dive_records = root.findall(".//diveLogRecords/diveLogRecord")
@@ -317,7 +441,16 @@ class ShearwaterParser(DiveParser):
 
         print(f"Parsed {len(profile_data)} samples from Shearwater dive log.")
         print("Sample data:", profile_data[:3])  # Print first 3 samples for debugging
-        return profile_data
+
+        # Calculate dive end time
+        last_sample_time = profile_data[-1].time if profile_data else 0
+        end_time = start_time + timedelta(seconds=last_sample_time)
+
+        return DiveData(
+            samples=profile_data,
+            start_time=start_time,
+            end_time=end_time
+        )
 
 
 # Parser registry
@@ -327,7 +460,7 @@ PARSER_REGISTRY = {
 }
 
 
-def parse_dive_log(file_path: str) -> List[DiveSample]:
+def parse_dive_log(file_path: str) -> DiveData:
     for ext, parser in PARSER_REGISTRY.items():
         if file_path.lower().endswith(ext):
             return parser.parse(file_path)

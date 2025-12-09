@@ -1,21 +1,32 @@
 import argparse
-from parser import parse_dive_log, DiveLogError
+from parser import parse_dive_log, DiveLogError, extract_dive_segment
 from template import load_template, TemplateError
 from overlay import generate_overlay_video, generate_test_template_image
+from video_metadata import extract_video_metadata, detect_timezone_offset
+from video_segment_errors import (
+    VideoSegmentError, VideoReadError, VideoMetadataError,
+    TimezoneOffsetError, SegmentOutOfBoundsError, EmptySegmentError
+)
+from datetime import timedelta
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--template", required=True, help="YAML layout template file")
     parser.add_argument("--log", required=False, help="Dive log file (e.g. .ssrf)")
     parser.add_argument("--output", required=False, default="output_overlay.mp4", help="Output overlay video file (e.g. overlay.mp4)")
-    parser.add_argument("--duration", type=int, default=None, help="Override duration (seconds). If omitted, derived from dive log last sample time.")
+    parser.add_argument("--duration", type=int, default=None, help="Duration in seconds. For full dive if not in segment mode, or segment duration with --start")
     parser.add_argument("--fps", type=int, default=10, help="Frames per second for output video")
     parser.add_argument("--test-template", action="store_true", help="Generate a single PNG image with dummy data and exit")
     parser.add_argument("--units", choices=["metric", "imperial"], help="Override all display units (metric or imperial)")
+    parser.add_argument("--match-video", help="Video file to match for automatic segment extraction")
+    parser.add_argument("--start", type=int, help="Manual segment start time in seconds from dive start")
     args = parser.parse_args()
 
     if not args.test_template and not args.log:
         parser.error("--log is required unless --test-template is used")
+
+    if args.start is not None and args.duration is None:
+        parser.error("--duration is required when using --start")
 
     units_override = None
     if args.units:
@@ -40,8 +51,8 @@ def main():
 
     # Parse dive log
     try:
-        dive_samples = parse_dive_log(args.log)
-        if not dive_samples:
+        dive_data = parse_dive_log(args.log)
+        if not dive_data.samples:
             print("❌ No dive data parsed. Exiting.")
             return
     except DiveLogError as e:
@@ -51,6 +62,100 @@ def main():
         print(f"❌ Unexpected error while parsing dive log: {e}")
         print("   Please check that the file exists and is a valid dive log.")
         return
+
+    # Determine segment extraction mode
+    dive_samples = dive_data.samples  # Default to full dive
+    segment_start_offset = None
+    segment_duration = None
+    time_offset = 0  # Offset for segment rendering
+
+    if args.match_video:
+        # Automatic segment matching mode
+        try:
+            print(f"🔍 Analyzing video: {args.match_video}")
+            video_metadata = extract_video_metadata(args.match_video)
+            print(f"   Video duration: {video_metadata.duration:.1f}s")
+            source_label = "video metadata" if video_metadata.source == "video_metadata" else "file system"
+            print(f"   Creation time: {video_metadata.start_time} (from {source_label})")
+
+            print(f"🔍 Detecting timezone offset...")
+            timezone_offset = detect_timezone_offset(
+                video_metadata.start_time,
+                dive_data.start_time,
+                dive_data.end_time
+            )
+
+            if timezone_offset is None:
+                raise TimezoneOffsetError(
+                    video_metadata.start_time,
+                    dive_data.start_time,
+                    dive_data.end_time,
+                    max_offset=10,
+                    video_duration=video_metadata.duration
+                )
+
+            print(f"   Detected offset: {timezone_offset:+d} hours")
+
+            # Calculate segment boundaries
+            video_start_utc = video_metadata.start_time + timedelta(hours=timezone_offset)
+            segment_start_offset = int((video_start_utc - dive_data.start_time).total_seconds())
+            segment_end_offset = segment_start_offset + int(video_metadata.duration)
+            segment_duration = int(video_metadata.duration)
+
+            print(f"🔍 Extracting dive segment...")
+            print(f"   Segment start: {segment_start_offset}s from dive start")
+            print(f"   Segment end: {segment_end_offset}s from dive start")
+
+            dive_samples = extract_dive_segment(
+                dive_data,
+                segment_start_offset,
+                segment_end_offset
+            )
+            time_offset = segment_start_offset
+            print(f"   Extracted {len(dive_samples)} samples")
+
+        except (VideoReadError, VideoMetadataError) as e:
+            print(f"❌ Video error: {e}")
+            return
+        except TimezoneOffsetError as e:
+            print(f"❌ {e}")
+            return
+        except (SegmentOutOfBoundsError, EmptySegmentError) as e:
+            print(f"❌ {e}")
+            return
+        except Exception as e:
+            print(f"❌ Unexpected error during segment matching: {e}")
+            import traceback
+            traceback.print_exc()
+            return
+
+    elif args.start is not None:
+        # Manual segment mode
+        segment_start_offset = args.start
+        segment_end_offset = segment_start_offset + args.duration  # Already validated to be present
+        segment_duration = args.duration
+
+        try:
+            print(f"🔍 Extracting manual dive segment...")
+            print(f"   Segment start: {segment_start_offset}s from dive start")
+            print(f"   Segment end: {segment_end_offset}s from dive start")
+
+            dive_samples = extract_dive_segment(
+                dive_data,
+                segment_start_offset,
+                segment_end_offset
+            )
+            time_offset = segment_start_offset
+            print(f"   Extracted {len(dive_samples)} samples")
+
+        except (SegmentOutOfBoundsError, EmptySegmentError) as e:
+            print(f"❌ {e}")
+            return
+        except Exception as e:
+            print(f"❌ Unexpected error during segment extraction: {e}")
+            import traceback
+            traceback.print_exc()
+            return
 
     # Load template
     try:
@@ -67,8 +172,13 @@ def main():
     height = int(template.get("height", 280))
     resolution = (width, height)
 
-    # Duration: user override or derive from last sample time
-    duration = args.duration if args.duration is not None else int(dive_samples[-1].time) + 1
+    # Duration: use segment duration if in segment mode, otherwise user override or derive from last sample time
+    if segment_duration is not None:
+        duration = segment_duration
+    elif args.duration is not None:
+        duration = args.duration
+    else:
+        duration = int(dive_samples[-1].time) + 1
 
     print(f"Generating overlay video: {args.output}")
     print(f" - Resolution: {resolution[0]}x{resolution[1]}")
@@ -77,7 +187,7 @@ def main():
         print(f" - Units: {args.units} -> {units_override}")
 
     try:
-        generate_overlay_video(dive_samples, template, args.output, resolution=resolution, duration=duration, fps=args.fps, units_override=units_override)
+        generate_overlay_video(dive_samples, template, args.output, resolution=resolution, duration=duration, fps=args.fps, units_override=units_override, time_offset=time_offset)
         print(f"✅ Done. Overlay video saved to: {args.output}")
     except Exception as e:
         print(f"❌ Error generating overlay video: {e}")

@@ -25,6 +25,7 @@ dependencies = [
     "opencv-python>=4.8.0",
     "pillow>=10.0.0",
     "pyyaml>=6.0",
+    "pymediainfo>=6.0.0",
 ]
 
 [project.optional-dependencies]

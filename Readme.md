@@ -214,7 +214,87 @@ Getting the overlay to line up with your dive video is mostly about creating **c
 4. Play back to verify the timing.
 
 **Expected accuracy:** ~**±10 seconds** with a single reference shot.  
-- On **flat, level sections** with minimal depth change, being **20–30 seconds off** usually **won’t be noticeable**.
+- On **flat, level sections** with minimal depth change, being **20–30 seconds off** usually **won't be noticeable**.
+
+---
+
+## 🎥 Video Segment Matching
+
+**Generate overlay videos for specific segments of your dive** that match camera video clips. Instead of creating an overlay for the entire dive, you can automatically extract just the portion that matches your recorded footage.
+
+### Automatic Segment Matching
+
+Automatically detects which part of the dive matches your video using metadata:
+
+```bash
+scuba-overlay --template templates/perdix-ai-oc-tech.yaml \
+  --log samples/dive446.ssrf \
+  --match-video footage.mp4 \
+  --output segment_overlay.mp4
+```
+
+**How it works:**
+1. Extracts video duration and creation time from video metadata
+2. Automatically detects timezone offset (tries ±10 hours)
+3. Finds matching segment in your dive log
+4. Generates overlay with actual dive times (not reset to 0)
+
+**Benefits:**
+- No manual calculations needed
+- Handles timezone differences between camera and dive computer
+- Preserves actual dive times in overlay
+- Works with multiple clips from the same dive
+
+### Manual Segment Mode
+
+Specify exact segment times when automatic detection doesn't work:
+
+```bash
+scuba-overlay --template templates/perdix-ai-oc-tech.yaml \
+  --log samples/dive446.ssrf \
+  --start 850 \
+  --duration 25 \
+  --output segment_overlay.mp4
+```
+
+- `--start`: Seconds from dive start where segment begins
+- `--duration`: Length of segment in seconds
+
+**When to use manual mode:**
+- Video file has no metadata or incorrect timestamps
+- Timezone offset exceeds ±10 hours
+- You want precise control over segment boundaries
+
+### Timezone Offset Detection
+
+The tool automatically tries timezone offsets in this order: 0, +1h, -1h, +2h, -2h, ... up to ±10h.
+
+**Example:** If your camera is set to EST (-5h UTC) and your dive computer is in UTC, the tool will detect the -5h offset and correctly match the segment.
+
+### Troubleshooting Segment Matching
+
+**"Could not detect timezone offset"**
+- Video is from a different dive (time difference > 10 hours)
+- Camera or dive computer clock is significantly wrong
+- **Solution:** Use manual mode with `--start` and `--duration`
+
+**"Video segment is outside dive log bounds"**
+- Segment times don't fall within dive duration
+- **Solution:** Verify video timestamp and dive log are from the same dive
+
+**"Cannot extract metadata from video"**
+- Video file corrupted or unsupported format
+- **Solution:** Try re-exporting video or use manual mode
+
+### Supported Video Formats
+
+Depends on OpenCV support (typically: MP4, AVI, MOV, MKV). The tool extracts:
+- **Preferred:** Video metadata creation time (from camera)
+- **Fallback:** File system creation time (less accurate)
+
+**Best results:** Use original video files directly from camera without copying/editing.
+
+For detailed information, see **[Video Segment Matching Guide](docs/video-segment-matching.md)**.
 
 ---
 
@@ -225,10 +305,29 @@ Getting the overlay to line up with your dive video is mostly about creating **c
 | `--template`    | Path to YAML template (required) |
 | `--log`         | Dive log file (.ssrf or .xml) |
 | `--output`      | Output MP4 filename (default: `output_overlay.mp4`) |
-| `--duration`    | Force duration in seconds |
+| `--match-video` | Video file to match for automatic segment extraction |
+| `--start`       | Manual segment: start time in seconds from dive start |
+| `--duration`    | Video duration in seconds (used with `--start` for manual segments, or to override full dive duration) |
 | `--fps`         | Frames per second (default: 10) |
 | `--test-template` | Generate single PNG and exit |
 | `--units`       | `metric` or `imperial` (default: metric) |
+
+### Usage Modes
+
+**Full dive overlay:**
+```bash
+scuba-overlay --template template.yaml --log dive.ssrf --output overlay.mp4
+```
+
+**Automatic segment matching:**
+```bash
+scuba-overlay --template template.yaml --log dive.ssrf --match-video footage.mp4 --output segment.mp4
+```
+
+**Manual segment:**
+```bash
+scuba-overlay --template template.yaml --log dive.ssrf --start 300 --duration 120 --output segment.mp4
+```
 
 ---
 

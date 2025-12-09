@@ -33,7 +33,7 @@ build/
 dist/
 *.egg-info/
 *.spec
-!scuba-overlay.spec
+!pyinstaller.spec
 
 # IDEs
 .idea/

@@ -86,7 +86,7 @@ Resolve two critical issues with the current PyInstaller-based binary builds: sl
 - **GitHub Actions**: Can specify runner architecture
 
 **Build Strategy**:
-- **Intel build**: Use `macos-13` runner (last Intel runner)
+- **Intel build**: Use `macos-15` runner (last Intel runner)
 - **Apple Silicon build**: Use `macos-latest` (ARM64 runner)
 - **Universal binary**: Not pursued initially (requires more complex build, larger size)
 
@@ -231,7 +231,7 @@ matrix:
       artifact_name: scuba-overlay
       asset_name: scuba-overlay-${{ github.ref_name }}-windows-x64
       
-    - os: macos-13  # Intel
+    - os: macos-15  # Intel
       artifact_name: scuba-overlay
       asset_name: scuba-overlay-${{ github.ref_name }}-macos-intel
       arch: x86_64

@@ -15,7 +15,7 @@ jobs:
           - os: windows-latest
             artifact_name: scuba-overlay
             asset_name: scuba-overlay-${{ github.ref_name }}-windows-x64
-          - os: macos-13
+          - os: macos-15
             artifact_name: scuba-overlay
             asset_name: scuba-overlay-${{ github.ref_name }}-macos-intel
           - os: macos-latest

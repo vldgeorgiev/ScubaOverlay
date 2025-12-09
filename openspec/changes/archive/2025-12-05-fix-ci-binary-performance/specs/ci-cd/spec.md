@@ -110,7 +110,7 @@ The system SHALL automatically build standalone executables for Windows, macOS (
 
 #### Scenario: macOS Intel executable build (Updated)
 - **GIVEN** GitHub Actions workflow is triggered
-- **WHEN** macOS Intel build job executes using `macos-13` runner
+- **WHEN** macOS Intel build job executes using `macos-15` runner
 - **THEN** a macOS executable is created for x86_64 architecture
 - **AND** the executable includes Python runtime and all dependencies
 - **AND** the executable runs natively on Intel Macs without Rosetta
@@ -143,7 +143,7 @@ The system SHALL implement a GitHub Actions workflow with architecture-specific 
 #### Scenario: Separate macOS architecture builds
 - **GIVEN** workflow is triggered
 - **WHEN** macOS build jobs execute
-- **THEN** Intel build runs on `macos-13` runner
+- **THEN** Intel build runs on `macos-15` runner
 - **AND** Apple Silicon build runs on `macos-latest` runner
 - **AND** both builds produce architecture-specific artifacts
 - **AND** builds run in parallel with Windows and Linux builds

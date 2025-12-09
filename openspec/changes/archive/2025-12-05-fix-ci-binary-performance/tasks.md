@@ -15,7 +15,7 @@
 - [x] Modify `.github/workflows/build.yml` matrix strategy
   - [x] Update Windows build (keep `windows-latest`)
   - [x] Split macOS build into two separate jobs:
-    - [x] Add `macos-13` runner for Intel (x86_64) build
+    - [x] Add `macos-15` runner for Intel (x86_64) build
     - [x] Add `macos-latest` runner for Apple Silicon (arm64) build
   - [x] Update Linux build (keep `ubuntu-latest`)
 - [x] Update asset naming convention
@@ -127,7 +127,7 @@
 ## Notes
 
 - **onedir vs onefile**: onedir eliminates extraction overhead but requires zip distribution
-- **macOS runners**: `macos-13` is last Intel runner; `macos-14+` is Apple Silicon
+- **macOS runners**: `macos-15` is last Intel runner; `macos-14+` is Apple Silicon
 - **Archive size**: Total archive size similar to onefile, just organized differently
 - **User experience**: One extra step (extract zip) but 10-30x faster startup
 - **Testing priority**: macOS Intel build is most critical (previous breakage)

@@ -21,7 +21,7 @@ This openspec fix addresses two critical issues with the CI-built binaries:
 - **Result**: 10-30x faster startup (<2 seconds vs 10-30 seconds)
 
 ### Architecture Fix
-- Split macOS builds: `macos-13` (Intel) + `macos-latest` (Apple Silicon)
+- Split macOS builds: `macos-15` (Intel) + `macos-latest` (Apple Silicon)
 - Update asset naming: `macos-intel` and `macos-apple-silicon`
 - Provide clear download instructions for each architecture
 - **Result**: Both Intel and ARM Macs work natively

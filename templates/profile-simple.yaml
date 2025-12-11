@@ -12,9 +12,9 @@ graph:
   height: 250
 
   line:
-    color: "#00AAFF"  # Bright blue
+    color: "#00D4FF"  # Bright blue
     thickness: 3
 
   indicator:
-    color: "#FF0000"  # Red dot
-    size: 10
+    color: "#FF4500"  # Orange-red dot
+    size: 8

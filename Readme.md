@@ -38,6 +38,8 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 
 ### Dive Profile Graph Overlay
 - **Visual depth profile** — graph showing depth over time with moving position indicator
+- **Gas change markers** — visual indicators showing when breathing gas was switched (technical diving)
+- **Decompression ceiling** — shaded area showing computer-reported ceiling depth (deco diving)
 - **Independent overlay** — generate profile separately from computer data for flexible compositing
 - **Template-based styling** — customize colors, line thickness, indicator size via YAML
 - **Grid and axes** — optional grid lines, axis labels, and tick marks for reference

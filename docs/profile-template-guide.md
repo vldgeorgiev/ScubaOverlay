@@ -44,6 +44,72 @@ graph:
 
 The profile line connects all depth samples from the dive log, showing the dive's depth progression over time.
 
+### Gas Changes (Technical Diving)
+
+```yaml
+graph:
+  gas_changes:
+    show: true                 # Enable gas change markers
+    show_labels: true          # Show gas mixture labels
+    
+    marker:
+      color: "#FFFFFF"         # Marker icon color
+      size: 12                 # Icon size in pixels
+      icon: "▼"               # Unicode icon/glyph
+      font: "Arial"            # Font for rendering icon
+    
+    label_font:
+      name: "Arial"
+      size: 14
+      color: "#FFFF00"         # Yellow for high visibility
+    label_position: "above"    # "above" or "below" marker
+```
+
+Gas changes visualize breathing gas switches during the dive. The system:
+
+- Detects gas changes from dive log events (fractionO2, fractionHe)
+- Renders icon markers at each gas change point on the depth profile
+- Displays gas mixture using standard diving notation:
+  - **AIR**: 21% O2, no helium
+  - **EAN50**: Enriched Air Nitrox 50% O2
+  - **18/45**: Trimix (18% O2, 45% He)
+- Recommended icons (widely supported): ▼, ▲, ●, ◆, ■, ▶
+- Note: Emoji icons (🔄, 💨) may not render properly with standard fonts
+
+**Note**: If your dive log has no gas changes (single gas dive), no markers will be shown even if enabled.
+
+### Decompression Ceiling
+
+```yaml
+graph:
+  deco_ceiling:
+    show: true                # Enable ceiling visualization
+    style: "both"             # "filled", "line", or "both"
+    
+    fill_color: "#FF000030"   # Red with transparency (RGBA hex)
+    
+    border:
+      color: "#FF0000"        # Border line color
+      thickness: 2            # Border line thickness
+```
+
+The decompression ceiling shows the shallowest depth the diver can safely ascend to without violating decompression limits, as reported by the dive computer.
+
+- **Filled area**: Shaded zone from surface to ceiling (forbidden zone)
+- **Border line**: Traces the ceiling depth over time
+- **Style options**:
+  - `"filled"`: Show only filled area
+  - `"line"`: Show only border line
+  - `"both"`: Show filled area with border
+
+**Color format for transparency**:
+
+- Use 8-character hex: `#RRGGBBAA`
+- Example: `#FF000030` = red with ~19% opacity (48/255)
+- Example: `#80008080` = purple with 50% opacity (128/255)
+
+**Note**: Recreational no-decompression dives will show no ceiling (ceiling = 0m = surface).
+
 ### Position Indicator
 
 ```yaml
@@ -81,7 +147,6 @@ graph:
         name: "Arial"
         size: 18
         color: "#FFFFFF"
-      label_position: "left"    # "left" or "right"
       show_ticks: true
       tick_interval: 10         # Tick every 10m (or ft if imperial)
       tick_color: "#FFFFFF"
@@ -92,7 +157,6 @@ graph:
         name: "Arial"
         size: 18
         color: "#FFFFFF"
-      label_position: "bottom"  # "top" or "bottom"
       show_ticks: true
       tick_interval: 60         # Tick every 60 seconds
       tick_format: "mm:ss"      # "mm:ss" or "seconds"
@@ -177,7 +241,6 @@ graph:
     depth_axis:
       label: "Depth (m)"
       label_font: { name: "Arial", size: 18, color: "#FFFFFF" }
-      label_position: "left"
       show_ticks: true
       tick_interval: 10
       tick_color: "#FFFFFF"
@@ -185,7 +248,6 @@ graph:
     time_axis:
       label: "Time"
       label_font: { name: "Arial", size: 18, color: "#FFFFFF" }
-      label_position: "bottom"
       show_ticks: true
       tick_interval: 60
       tick_format: "mm:ss"

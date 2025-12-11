@@ -49,7 +49,52 @@ graph:
     # Indicator size (required)
     # Radius of the circular indicator in pixels
     # Typical range: 8-15 pixels
-    size: 12
+    size: 8
+
+  # Gas change visualization (optional, for technical diving)
+  # Shows markers and labels when breathing gas changes during the dive
+  gas_changes:
+    # Enable/disable gas change markers (optional, default: false)
+    show: true
+
+    # Show gas mixture labels at each change (optional, default: true)
+    show_labels: true
+
+    # Marker icon configuration
+    marker:
+      color: "#FFFFFF"         # Hex color for marker icon
+      size: 20                 # Icon size in pixels
+      icon: "▲"                # Unicode icon/glyph (▼, ⬇, ●, ◆, ▲, etc.)
+      font: "Arial"            # Font for rendering the icon
+
+    # Label font configuration
+    label_font:
+      name: "Arial"            # Font name
+      size: 14                 # Font size in pixels
+      color: "#FFFF00"         # Hex color (yellow for visibility)
+
+    # Label position relative to marker (optional, default: "above")
+    # "above" = above marker icon, "below" = below marker icon
+    label_position: "above"
+
+  # Decompression ceiling visualization (optional, for technical/deco diving)
+  # Shows the computer-reported ceiling (shallowest safe ascent depth)
+  deco_ceiling:
+    # Enable/disable ceiling visualization (optional, default: false)
+    show: true
+
+    # Visualization style (optional, default: "filled")
+    # "filled" = shaded area only
+    # "line" = border line only
+    # "both" = shaded area with border line
+    style: "filled"
+
+    fill_color: "#A02020"
+
+    # Border line configuration (used when style is "line" or "both")
+    border:
+      color: "#A02020"         # Hex color for border line
+      thickness: 2             # Line thickness in pixels
 
   # Grid and axes configuration (optional)
   # Grid lines, axis labels, and tick marks
@@ -60,18 +105,16 @@ graph:
     grid_interval: { time: 300, depth: 10 }  # Grid every 300s (5 min), 10m
 
     depth_axis:
-      label: "Depth (m)"
+      # label: "Depth (m)"
       label_font: { name: "Arial", size: 18, color: "#FFFFFF" }
-      label_position: "left"    # "left" or "right"
       show_ticks: true
       tick_interval: 10         # Tick every 10m (or ft if imperial)
       tick_color: "#FFFFFF"
 
     time_axis:
-      label: "Time"
-      label_font: { name: "Arial", size: 14, color: "#FFFFFF" }
-      label_position: "bottom"  # "top" or "bottom"
+      # label: "Time"
+      label_font: { name: "Arial", size: 18, color: "#FFFFFF" }
       show_ticks: true
-      tick_interval: 300        # Tick every 300 seconds (5 minutes)
+      tick_interval: 600        # Tick every 300 seconds (5 minutes)
       tick_format: "mm"      # "mm:ss", "mm", or "seconds"
       tick_color: "#FFFFFF"

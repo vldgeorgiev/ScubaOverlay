@@ -18,6 +18,34 @@ from font_utils import get_font, get_font_name
 _M_TO_FT = 3.28084
 
 
+def _format_gas_mixture(fraction_o2: Optional[float], fraction_he: Optional[float]) -> str:
+    """Format gas mixture for display using standard diving notation.
+
+    Args:
+        fraction_o2: Fraction of oxygen (0.0-1.0)
+        fraction_he: Fraction of helium (0.0-1.0)
+
+    Returns:
+        Formatted gas string (e.g., "AIR", "EAN50", "18/45")
+    """
+    if fraction_o2 is None:
+        return "Unknown"
+
+    o2_percent = int(round(fraction_o2 * 100))
+    he_percent = int(round(fraction_he * 100)) if fraction_he else 0
+
+    # Air (21% O2, no He)
+    if o2_percent == 21 and he_percent == 0:
+        return "AIR"
+
+    # Nitrox (>21% O2, no He)
+    if he_percent == 0:
+        return f"EAN{o2_percent}"
+
+    # Trimix (with helium)
+    return f"{o2_percent}/{he_percent}"
+
+
 @dataclass
 class _CompiledProfileTemplate:
     """Pre-compiled profile template with static graph background."""
@@ -142,7 +170,7 @@ def _render_position_indicator(
         graph_width: Graph area width
         graph_height: Graph area height
         indicator_color: RGB tuple for indicator color
-        indicator_size: Indicator radius in pixels
+        indicator_size: Radius of indicator in pixels
         depth_converter: Optional function to convert depth units
     """
     depth = current_sample.depth
@@ -155,6 +183,231 @@ def _render_position_indicator(
     # Draw circle
     r = indicator_size
     draw.ellipse([(x-r, y-r), (x+r, y+r)], fill=indicator_color)
+
+
+def _render_gas_changes(
+    draw: ImageDraw.ImageDraw,
+    samples: List[DiveSample],
+    total_duration: int,
+    max_depth: float,
+    graph_x: int,
+    graph_y: int,
+    graph_width: int,
+    graph_height: int,
+    gas_config: Dict[str, Any],
+    depth_converter: Optional[callable] = None
+) -> None:
+    """Render gas change markers and labels on the profile graph.
+
+    Args:
+        draw: PIL ImageDraw object
+        samples: List of dive samples
+        total_duration: Total duration in seconds
+        max_depth: Maximum depth
+        graph_x: Graph area X offset
+        graph_y: Graph area Y offset
+        graph_width: Graph area width
+        graph_height: Graph area height
+        gas_config: Gas changes configuration from template
+        depth_converter: Optional function to convert depth units
+    """
+    if not gas_config.get("show", False):
+        return
+
+    # Extract gas change events (where fractionO2/He change)
+    gas_changes = []
+    prev_o2 = None
+    prev_he = None
+
+    for sample in samples:
+        if sample.fractionO2 is not None:
+            # Check if gas changed
+            if prev_o2 != sample.fractionO2 or prev_he != sample.fractionHe:
+                gas_changes.append({
+                    "time": sample.time,
+                    "depth": sample.depth,
+                    "o2": sample.fractionO2,
+                    "he": sample.fractionHe
+                })
+                prev_o2 = sample.fractionO2
+                prev_he = sample.fractionHe
+
+    if not gas_changes:
+        return
+
+    # Extract configuration
+    marker_config = gas_config.get("marker", {})
+    marker_color = hex_to_rgb(marker_config.get("color", "#FFFFFF"))
+    marker_size = marker_config.get("size", 12)
+    marker_icon = marker_config.get("icon", "▼")  # Default: down-pointing triangle
+
+    show_labels = gas_config.get("show_labels", True)
+    label_font_config = gas_config.get("label_font", {})
+    label_color = hex_to_rgb(label_font_config.get("color", "#FFFF00"))
+    label_size = label_font_config.get("size", 14)
+    label_position = gas_config.get("label_position", "above")
+
+    try:
+        font = get_font(label_font_config.get("name", "Arial"), label_size)
+    except:
+        font = ImageFont.load_default()
+
+    # Prepare icon font for markers
+    try:
+        icon_font = get_font(marker_config.get("font", "Arial"), marker_size)
+    except:
+        icon_font = ImageFont.load_default()
+
+    # Render each gas change
+    for gc in gas_changes:
+        time_sec = int(gc["time"])
+        depth = gc["depth"]
+        if depth_converter:
+            depth = depth_converter(depth)
+
+        x = _time_to_x(time_sec, total_duration, graph_x, graph_width)
+        y_depth = _depth_to_y(depth, max_depth, graph_y, graph_height)
+
+        # Draw icon marker at the depth where gas change occurred
+        icon_bbox = draw.textbbox((0, 0), marker_icon, font=icon_font)
+        icon_width = icon_bbox[2] - icon_bbox[0]
+        icon_height = icon_bbox[3] - icon_bbox[1]
+        icon_x = x - icon_width // 2
+        icon_y = y_depth - icon_height // 2
+        draw.text((icon_x, icon_y), marker_icon, fill=marker_color, font=icon_font)
+
+        # Draw label if enabled
+        if show_labels:
+            gas_label = _format_gas_mixture(gc["o2"], gc["he"])
+
+            # Get text size for positioning
+            bbox = draw.textbbox((0, 0), gas_label, font=font)
+            text_width = bbox[2] - bbox[0]
+            text_height = bbox[3] - bbox[1]
+
+            # Position label relative to the icon
+            if label_position == "above":
+                label_y = icon_y - text_height - 5
+            else:  # below
+                label_y = icon_y + icon_height + 5
+
+            label_x = x - text_width // 2
+
+            # Draw label
+            draw.text((label_x, label_y), gas_label, fill=label_color, font=font)
+
+
+def _render_deco_ceiling(
+    draw: ImageDraw.ImageDraw,
+    samples: List[DiveSample],
+    total_duration: int,
+    max_depth: float,
+    graph_x: int,
+    graph_y: int,
+    graph_width: int,
+    graph_height: int,
+    ceiling_config: Dict[str, Any],
+    depth_converter: Optional[callable] = None
+) -> None:
+    """Render decompression ceiling as filled area or line.
+
+    Args:
+        draw: PIL ImageDraw object
+        samples: List of dive samples
+        total_duration: Total duration in seconds
+        max_depth: Maximum depth
+        graph_x: Graph area X offset
+        graph_y: Graph area Y offset
+        graph_width: Graph area width
+        graph_height: Graph area height
+        ceiling_config: Deco ceiling configuration from template
+        depth_converter: Optional function to convert depth units
+    """
+    if not ceiling_config.get("show", False):
+        return
+
+    # Extract ceiling depths from samples
+    ceiling_points = []
+    has_nonzero_ceiling = False
+
+    for sample in samples:
+        ceiling_depth = sample.stop_depth if sample.stop_depth else 0.0
+
+        # Track if there's any actual ceiling (non-zero depth)
+        if ceiling_depth > 0:
+            has_nonzero_ceiling = True
+
+        # Convert depth if needed
+        if depth_converter:
+            ceiling_depth = depth_converter(ceiling_depth)
+
+        time_sec = int(sample.time)
+        x = _time_to_x(time_sec, total_duration, graph_x, graph_width)
+        y = _depth_to_y(ceiling_depth, max_depth, graph_y, graph_height)
+
+        ceiling_points.append((x, y))
+
+    # Don't render if no ceiling points or all ceilings are at 0 (surface)
+    if not ceiling_points or not has_nonzero_ceiling:
+        return
+
+    # Get rendering style
+    style = ceiling_config.get("style", "filled")
+
+    # Render filled area
+    if style in ("filled", "both"):
+        fill_color_hex = ceiling_config.get("fill_color", "#FF000030")
+
+        # Parse RGBA hex color
+        if len(fill_color_hex) == 9:  # #RRGGBBAA
+            r = int(fill_color_hex[1:3], 16)
+            g = int(fill_color_hex[3:5], 16)
+            b = int(fill_color_hex[5:7], 16)
+            a = int(fill_color_hex[7:9], 16)
+            fill_color = (r, g, b, a)
+        else:  # #RRGGBB - default to 50% opacity
+            fill_color = hex_to_rgb(fill_color_hex) + (128,)
+
+        # Build polygon segments only where ceiling is below surface
+        # Split into separate polygons where ceiling depth > 0
+        current_segment = []
+
+        for i, (x, y) in enumerate(ceiling_points):
+            if y > graph_y:  # Ceiling is below surface (has depth)
+                if not current_segment:
+                    # Start new segment - add surface point at this x
+                    current_segment.append((x, graph_y))
+                current_segment.append((x, y))
+            else:
+                # Ceiling at surface - close current segment if exists
+                if current_segment:
+                    # Add surface point at previous x and close
+                    prev_x = ceiling_points[i-1][0] if i > 0 else x
+                    current_segment.append((prev_x, graph_y))
+                    # Draw this segment
+                    if len(current_segment) >= 3:
+                        draw.polygon(current_segment, fill=fill_color)
+                    current_segment = []
+
+        # Close final segment if exists
+        if current_segment:
+            last_x = ceiling_points[-1][0]
+            current_segment.append((last_x, graph_y))
+            if len(current_segment) >= 3:
+                draw.polygon(current_segment, fill=fill_color)
+
+    # Render border line
+    if style in ("line", "both"):
+        border_config = ceiling_config.get("border", {})
+        border_color = hex_to_rgb(border_config.get("color", "#FF0000"))
+        border_thickness = border_config.get("thickness", 2)
+
+        # Draw line connecting ceiling points (only if there's variation from surface)
+        # Filter out points that are at the surface to avoid drawing a line at y=0
+        non_surface_points = [(x, y) for x, y in ceiling_points if y != graph_y]
+
+        if len(non_surface_points) > 1:
+            draw.line(non_surface_points, fill=border_color, width=border_thickness)
 
 
 def _render_grid(
@@ -246,27 +499,20 @@ def _render_axis_labels(
             except:
                 font = ImageFont.load_default()
 
-            label_position = depth_axis.get("label_position", "left")
             padded_max = max_depth * 1.1
             depth = 0
 
             while depth <= padded_max:
                 y = _depth_to_y(depth, max_depth, graph_y, graph_height)
 
-                # Draw tick mark
-                if label_position == "left":
-                    draw.line([(graph_x - 5, y), (graph_x, y)], fill=tick_color, width=1)
-                    # Draw label
-                    label = f"{int(depth)}"
-                    bbox = draw.textbbox((0, 0), label, font=font)
-                    text_width = bbox[2] - bbox[0]
-                    draw.text((graph_x - 10 - text_width, y - font_size // 2),
-                             label, fill=font_color, font=font)
-                else:  # right
-                    draw.line([(graph_x + graph_width, y), (graph_x + graph_width + 5, y)],
-                             fill=tick_color, width=1)
-                    draw.text((graph_x + graph_width + 10, y - font_size // 2),
-                             f"{int(depth)}", fill=font_color, font=font)
+                # Draw tick mark on left side
+                draw.line([(graph_x - 5, y), (graph_x, y)], fill=tick_color, width=1)
+                # Draw label
+                label = f"{int(depth)}"
+                bbox = draw.textbbox((0, 0), label, font=font)
+                text_width = bbox[2] - bbox[0]
+                draw.text((graph_x - 10 - text_width, y - font_size // 2),
+                         label, fill=font_color, font=font)
 
                 depth += tick_interval
 
@@ -282,15 +528,27 @@ def _render_axis_labels(
             except:
                 font = ImageFont.load_default()
 
-            # Position axis label
-            label_position = depth_axis.get("label_position", "left")
-            if label_position == "left":
-                draw.text((5, graph_y - font_size - 5), label_text, fill=font_color, font=font)
-            else:
-                bbox = draw.textbbox((0, 0), label_text, font=font)
-                text_width = bbox[2] - bbox[0]
-                draw.text((graph_x + graph_width - text_width - 5, graph_y - font_size - 5),
-                         label_text, fill=font_color, font=font)
+            # Create a temporary image for rotated text
+            bbox = draw.textbbox((0, 0), label_text, font=font)
+            text_width = int(bbox[2] - bbox[0])
+            text_height = int(bbox[3] - bbox[1])
+
+            # Create image for text
+            text_img = Image.new('RGBA', (text_width + 10, text_height + 10), (0, 0, 0, 0))
+            text_draw = ImageDraw.Draw(text_img)
+            text_draw.text((5, 5), label_text, fill=font_color, font=font)
+
+            # Rotate 90 degrees counter-clockwise
+            rotated = text_img.rotate(90, expand=True)
+
+            # Place to the left of the graph, centered vertically
+            # Position it further left to avoid overlapping with tick labels
+            y_center = graph_y + graph_height // 2
+            paste_y = y_center - rotated.height // 2
+            # Position: move further left - rotated.width gives us space for the rotated text
+            paste_x = max(2, graph_x - 55 - rotated.width)
+            # Paste the rotated text onto the main image
+            draw._image.paste(rotated, (paste_x, paste_y), rotated)
 
     # Time axis
     if "time_axis" in axes_config:
@@ -310,47 +568,29 @@ def _render_axis_labels(
             except:
                 font = ImageFont.load_default()
 
-            label_position = time_axis.get("label_position", "bottom")
             time = 0
 
             while time <= total_duration:
                 x = _time_to_x(time, total_duration, graph_x, graph_width)
 
-                # Draw tick mark
-                if label_position == "bottom":
-                    draw.line([(x, graph_y + graph_height), (x, graph_y + graph_height + 5)],
-                             fill=tick_color, width=1)
-                    # Format time label
-                    if tick_format == "mm:ss":
-                        minutes = time // 60
-                        seconds = time % 60
-                        label = f"{minutes:02d}:{seconds:02d}"
-                    elif tick_format == "mm":
-                        minutes = time // 60
-                        label = f"{minutes}"
-                    else:  # seconds
-                        label = f"{time}"
+                # Draw tick mark on bottom
+                draw.line([(x, graph_y + graph_height), (x, graph_y + graph_height + 5)],
+                         fill=tick_color, width=1)
+                # Format time label
+                if tick_format == "mm:ss":
+                    minutes = time // 60
+                    seconds = time % 60
+                    label = f"{minutes:02d}:{seconds:02d}"
+                elif tick_format == "mm":
+                    minutes = time // 60
+                    label = f"{minutes}"
+                else:  # seconds
+                    label = f"{time}"
 
-                    bbox = draw.textbbox((0, 0), label, font=font)
-                    text_width = bbox[2] - bbox[0]
-                    draw.text((x - text_width // 2, graph_y + graph_height + 8),
-                             label, fill=font_color, font=font)
-                else:  # top
-                    draw.line([(x, graph_y - 5), (x, graph_y)], fill=tick_color, width=1)
-                    if tick_format == "mm:ss":
-                        minutes = time // 60
-                        seconds = time % 60
-                        label = f"{minutes:02d}:{seconds:02d}"
-                    elif tick_format == "mm":
-                        minutes = time // 60
-                        label = f"{minutes}"
-                    else:  # seconds
-                        label = f"{time}"
-
-                    bbox = draw.textbbox((0, 0), label, font=font)
-                    text_width = bbox[2] - bbox[0]
-                    draw.text((x - text_width // 2, graph_y - font_size - 8),
-                             label, fill=font_color, font=font)
+                bbox = draw.textbbox((0, 0), label, font=font)
+                text_width = bbox[2] - bbox[0]
+                draw.text((x - text_width // 2, graph_y + graph_height + 8),
+                         label, fill=font_color, font=font)
 
                 time += tick_interval
 
@@ -366,18 +606,15 @@ def _render_axis_labels(
             except:
                 font = ImageFont.load_default()
 
-            # Position axis label
-            label_position = time_axis.get("label_position", "bottom")
+            # Position axis label at bottom center
             bbox = draw.textbbox((0, 0), label_text, font=font)
             text_width = bbox[2] - bbox[0]
+            text_height = bbox[3] - bbox[1]
             x_center = graph_x + graph_width // 2
 
-            if label_position == "bottom":
-                draw.text((x_center - text_width // 2, graph_y + graph_height + 35),
-                         label_text, fill=font_color, font=font)
-            else:
-                draw.text((x_center - text_width // 2, 5),
-                         label_text, fill=font_color, font=font)
+            # Position below ticks with less spacing
+            draw.text((x_center - text_width // 2, graph_y + graph_height + 25),
+                     label_text, fill=font_color, font=font)
 
 
 def hex_to_rgb(hex_color: str) -> Tuple[int, int, int]:
@@ -504,6 +741,22 @@ def compile_profile_template(
             use_imperial
         )
 
+    # Render decompression ceiling if configured (before profile line)
+    deco_ceiling_config = graph.get("deco_ceiling", {})
+    if deco_ceiling_config.get("show", False):
+        _render_deco_ceiling(
+            draw,
+            dive_samples,
+            duration,
+            max_depth,
+            graph_x,
+            graph_y,
+            graph_width,
+            graph_height,
+            deco_ceiling_config,
+            depth_converter
+        )
+
     # Render static profile line
     _render_profile_line(
         draw,
@@ -518,6 +771,22 @@ def compile_profile_template(
         line_thickness,
         depth_converter
     )
+
+    # Render gas changes if configured (after profile line)
+    gas_changes_config = graph.get("gas_changes", {})
+    if gas_changes_config.get("show", False):
+        _render_gas_changes(
+            draw,
+            dive_samples,
+            duration,
+            max_depth,
+            graph_x,
+            graph_y,
+            graph_width,
+            graph_height,
+            gas_changes_config,
+            depth_converter
+        )
 
     # Store configuration for dynamic rendering
     graph_config = {
@@ -674,28 +943,73 @@ def generate_test_profile_image(
     # Create dummy dive profile (descent, bottom time, ascent, safety stop)
     dummy_samples = []
 
-    # Descent: 0-30m over 3 minutes
+    # Descent: 0-30m over 3 minutes (on air)
     for t in range(0, 180, 10):
         depth = (t / 180.0) * 30.0
-        dummy_samples.append(DiveSample(time=t, depth=depth))
+        dummy_samples.append(DiveSample(
+            time=t,
+            depth=depth,
+            fractionO2=0.21,  # Air
+            fractionHe=0.0,
+            stop_depth=0.0
+        ))
 
-    # Bottom time: 30m for 20 minutes
+    # Bottom time: 30m for 20 minutes (still on air)
     for t in range(180, 1380, 10):
-        dummy_samples.append(DiveSample(time=t, depth=30.0))
+        dummy_samples.append(DiveSample(
+            time=t,
+            depth=30.0,
+            fractionO2=0.21,
+            fractionHe=0.0,
+            stop_depth=0.0
+        ))
 
-    # Ascent to 5m: 5 minutes
-    for t in range(1380, 1680, 10):
-        depth = 30.0 - ((t - 1380) / 300.0) * 25.0
-        dummy_samples.append(DiveSample(time=t, depth=depth))
+    # Gas change to EAN50 at start of ascent
+    # Ascent to 20m: 2 minutes
+    for t in range(1380, 1500, 10):
+        depth = 30.0 - ((t - 1380) / 120.0) * 10.0
+        ceiling = max(0, 20.0 - (t - 1380) / 120.0 * 15.0)  # Ceiling from 20m to 5m
+        dummy_samples.append(DiveSample(
+            time=t,
+            depth=depth,
+            fractionO2=0.50,  # EAN50
+            fractionHe=0.0,
+            stop_depth=ceiling
+        ))
 
-    # Safety stop at 5m: 3 minutes
+    # Continue ascent to 5m: 3 minutes with deco obligation
+    for t in range(1500, 1680, 10):
+        depth = 20.0 - ((t - 1500) / 180.0) * 15.0
+        ceiling = max(0, 5.0)  # Ceiling at 5m
+        dummy_samples.append(DiveSample(
+            time=t,
+            depth=depth,
+            fractionO2=0.50,
+            fractionHe=0.0,
+            stop_depth=ceiling
+        ))
+
+    # Safety/deco stop at 5m: 3 minutes
     for t in range(1680, 1860, 10):
-        dummy_samples.append(DiveSample(time=t, depth=5.0))
+        ceiling = max(0, 5.0 - ((t - 1680) / 180.0) * 5.0)  # Ceiling decreases to 0
+        dummy_samples.append(DiveSample(
+            time=t,
+            depth=5.0,
+            fractionO2=0.50,
+            fractionHe=0.0,
+            stop_depth=ceiling
+        ))
 
     # Surface
     for t in range(1860, 1920, 10):
         depth = 5.0 - ((t - 1860) / 60.0) * 5.0
-        dummy_samples.append(DiveSample(time=t, depth=max(0, depth)))
+        dummy_samples.append(DiveSample(
+            time=t,
+            depth=max(0, depth),
+            fractionO2=0.50,
+            fractionHe=0.0,
+            stop_depth=0.0
+        ))
 
     frame_size = (int(template.get("width", 800)), int(template.get("height", 300)))
     duration = 1920  # ~32 minutes

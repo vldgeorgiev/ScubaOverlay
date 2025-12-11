@@ -1,0 +1,74 @@
+# Technical Dive Profile Template Example
+# Demonstrates gas change and deco ceiling visualization
+
+template_name: profile-technical-dive
+width: 1920
+height: 400
+background_color: "#00FF00"  # Chroma green for video compositing
+
+graph:
+  position: { x: 50, y: 50 }
+  width: 1820
+  height: 300
+
+  line:
+    color: "#00AAFF"  # Bright cyan for depth profile
+    thickness: 4
+
+  indicator:
+    color: "#FF4500"  # Orange-red position indicator
+    size: 12
+
+  # Gas change visualization (NEW FEATURE)
+  gas_changes:
+    show: true  # Enable gas change markers
+    show_labels: true  # Show gas mixture labels
+
+    marker:
+      color: "#FFFFFF"  # White icon color
+      size: 12  # Icon size in pixels
+      icon: "▼"  # Down-pointing triangle
+      font: "Arial"  # Font for rendering icon
+
+    label_font:
+      name: "Arial"
+      size: 16
+      color: "#FFFF00"  # Yellow for high visibility
+    label_position: "above"  # Position labels above markers
+
+  # Decompression ceiling visualization (NEW FEATURE)
+  deco_ceiling:
+    show: true  # Enable ceiling display
+    style: "both"  # Show filled area AND border line
+
+    fill_color: "#FF000030"  # Red with ~19% opacity (30/255)
+
+    border:
+      color: "#FF0000"  # Bright red border
+      thickness: 3
+
+  # Optional: Grid and axes for reference
+  axes:
+    show_grid: true
+    grid_color: "#404040"
+    grid_thickness: 1
+    grid_interval:
+      time: 300  # Grid line every 5 minutes
+      depth: 10  # Grid line every 10 meters
+
+    depth_axis:
+      label: "Depth (m)"
+      label_font: { name: "Arial", size: 18, color: "#FFFFFF" }
+      label_position: "left"
+      show_ticks: true
+      tick_interval: 10
+      tick_color: "#FFFFFF"
+
+    time_axis:
+      label: "Time"
+      label_font: { name: "Arial", size: 16, color: "#FFFFFF" }
+      label_position: "bottom"
+      show_ticks: true
+      tick_interval: 300
+      tick_format: "mm:ss"
+      tick_color: "#FFFFFF"

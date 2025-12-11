@@ -155,6 +155,13 @@ Create custom displays by combining multiple data fields:
 
 - `fractionO2` - Oxygen fraction (0.21 for air)
 - `fractionHe` - Helium fraction (0.0 for air, >0 for trimix)
+- `ppo2` - Partial Pressure of Oxygen in bar (calculated/averaged)
+
+### PPO2 Sensors (CCR)
+
+- `ppo2_sensors[0]` - PPO2 sensor 1 reading in bar
+- `ppo2_sensors[1]` - PPO2 sensor 2 reading in bar
+- `ppo2_sensors[2]` - PPO2 sensor 3 reading in bar
 
 ### Tank Data
 

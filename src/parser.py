@@ -25,9 +25,7 @@ class DiveSample:
     gtr: Optional[int] = None  # Gas Time Remaining in seconds
     ppo2: Optional[float] = None  # Partial Pressure of Oxygen in bar
     cns: Optional[int] = None  # Central Nervous System Oxygen Toxicity in %
-    sensor1: Optional[float] = None  # Sensor 1 pressure in bar
-    sensor2: Optional[float] = None  # Sensor 2 pressure in bar
-    sensor3: Optional[float] = None  # Sensor 3 pressure in bar
+    ppo2_sensors: List[Optional[float]] = field(default_factory=list)  # PPO2 sensor values in bar
 
 
 @dataclass
@@ -203,13 +201,12 @@ class SubsurfaceParser(DiveParser):
             ndl=99, # Start value for Shearwater
             cns=0, # TODO implement
             ppo2=None, # TODO implement
-            sensor1=None, # MH
-            sensor2=None, # MH
-            sensor3=None, # MH
         )
         # Initialize pressures list length based on cylinders (if any)
         if cylinders:
             last_values.pressure = [None] * len(cylinders)
+        # Initialize ppo2_sensors list (typically 3 sensors for CCR)
+        last_values.ppo2_sensors = [None, None, None]
 
         for s in samples:
             attrs = s.attrib
@@ -231,12 +228,15 @@ class SubsurfaceParser(DiveParser):
                 last_values.stop_time = int(attrs["stoptime"].replace(" min", "").split(":")[0])
             if "dc_supplied_ppo2" in attrs:
                 last_values.ppo2 = float(attrs["dc_supplied_ppo2"].replace(" bar", ""))
-            if "sensor1" in attrs:
-                last_values.sensor1 = float(attrs["sensor1"].replace(" bar", ""))
-            if "sensor2" in attrs:
-                last_values.sensor2 = float(attrs["sensor2"].replace(" bar", ""))
-            if "sensor3" in attrs:
-                last_values.sensor3 = float(attrs["sensor3"].replace(" bar", ""))
+            
+            # Update PPO2 sensors
+            for i in range(3):  # Typically 3 sensors for CCR
+                key = f"sensor{i+1}"
+                if key in attrs:
+                    try:
+                        last_values.ppo2_sensors[i] = float(attrs[key].replace(" bar", ""))
+                    except (ValueError, IndexError):
+                        continue
 
             # Update tank pressures
             for i in range(len(cylinders)):
@@ -290,7 +290,6 @@ class SubsurfaceParser(DiveParser):
 
         print(f"Found {len(gas_changes)} gas change events.")
         print(f"Parsed {len(profile_data)} samples from dive log.")
-        print("Sample data:", profile_data[:3])  # Print first 3 samples for debugging
 
         # Calculate dive end time
         last_sample_time = profile_data[-1].time if profile_data else 0
@@ -350,6 +349,8 @@ class ShearwaterParser(DiveParser):
             ndl=99,  # Start value for Shearwater
             pressure=[None] * 4,  # Always 4 tanks in the log
         )
+        # Initialize ppo2_sensors list (typically 3 sensors for CCR)
+        last_values.ppo2_sensors = [None, None, None]
 
         for record in dive_records:
             time_ms = record.find("currentTime")
@@ -440,7 +441,6 @@ class ShearwaterParser(DiveParser):
             profile_data.append(copy.deepcopy(last_values))
 
         print(f"Parsed {len(profile_data)} samples from Shearwater dive log.")
-        print("Sample data:", profile_data[:3])  # Print first 3 samples for debugging
 
         # Calculate dive end time
         last_sample_time = profile_data[-1].time if profile_data else 0

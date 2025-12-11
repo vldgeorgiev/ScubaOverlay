@@ -82,7 +82,7 @@ The project aims to support multiple dive log formats (Subsurface .ssrf and Shea
 - **GTR** (Gas Time Remaining): Estimated time in seconds before running out of breathing gas
 - **PPO2** (Partial Pressure of Oxygen): Oxygen pressure in bar; critical for rebreather/CCR diving
 - **CNS** (Central Nervous System toxicity): Percentage measure of oxygen toxicity exposure
-- **Sensors**: Multiple oxygen sensors (sensor1, sensor2, sensor3) used in closed-circuit rebreather diving
+- **Sensors**: Multiple oxygen sensors (`ppo2_sensors[0]`, `ppo2_sensors[1]`, `ppo2_sensors[2]`) used in closed-circuit rebreather diving
 
 ### Dive Log Formats
 
@@ -105,6 +105,7 @@ The project aims to support multiple dive log formats (Subsurface .ssrf and Shea
 - **Unit system**: Internal data always stored in metric; conversion to imperial only for display
 - **Sample interpolation**: Dive computers sample at varying intervals; tool must handle missing/sparse data and forward-fill values
 - **Multi-tank support**: Supports multiple tank pressures via indexed fields (`pressure[0]`, `pressure[1]`)
+- **Multi-sensor support**: Supports multiple PPO2 sensors via indexed fields (`ppo2_sensors[0]`, `ppo2_sensors[1]`, `ppo2_sensors[2]`)
 
 ## External Dependencies
 

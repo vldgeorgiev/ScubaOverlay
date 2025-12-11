@@ -46,21 +46,21 @@ items:
 
   # Middle row
   - type: data
-    field: sensor1
+    field: ppo2_sensors[0]
     label: "PPO2"
     label_position: { x: 180, y: 290 }
     data_position:  { x: 180, y: 310 }
     precision: 2
 
   - type: data
-    field: sensor2
+    field: ppo2_sensors[1]
     label: ""
     label_position: { x: 300, y: 290 }
     data_position:  { x: 300, y: 310 }
     precision: 2
 
   - type: data
-    field: sensor3
+    field: ppo2_sensors[2]
     label: ""
     label_position: { x: 450, y: 290 }
     data_position:  { x: 450, y: 310 }

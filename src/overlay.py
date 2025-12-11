@@ -177,6 +177,8 @@ def _compile_template(template: Dict[str, Any], frame_size: tuple[int, int], uni
 
         if field_name.startswith("pressure["):
             quantity = "pressure"
+        elif field_name.startswith("ppo2_sensors["):
+            quantity = "pressure"  # PPO2 sensors also measured in bar/psi
         elif field_name in ("depth", "stop_depth"):
             quantity = "depth"
         elif field_name == "temperature":
@@ -248,6 +250,17 @@ def extract_value_from_data(field: str, data: DiveSample):
             if pressures is None or index >= len(pressures):
                 return None
             return pressures[index]
+        except Exception:
+            return None
+
+    # ppo2_sensors[i] - handle optional PPO2 sensor list
+    if field.startswith("ppo2_sensors["):
+        try:
+            index = int(field[13:-1])
+            sensors = data.ppo2_sensors
+            if sensors is None or index >= len(sensors):
+                return None
+            return sensors[index]
         except Exception:
             return None
 
@@ -363,6 +376,7 @@ def generate_test_template_image(template: Dict[str, Any], output_path: str, uni
         tts=10,
         temperature=22.5,
         pressure=[200.15, 180, 150.50, 120.95],
+        ppo2_sensors=[0.98, 1.02, 0.99],  # Typical CCR PPO2 sensor values
         stop_depth=6.0,
         stop_time=3,
         fractionO2=0.18,

@@ -29,8 +29,6 @@
   <extradata key='T1 battery' value='normal' />
   <extradata key='T2 battery' value='normal' />
   <event time='0:00 min' type='11' value='46' name='gaschange' cylinder='2' o2='46.0%' />
-  <event time='0:00 min' type='11' value='46' name='gaschange' cylinder='2' o2='46.0%' />
-  <event time='0:05 min' type='25' flags='3' name='gaschange' cylinder='2' o2='46.0%' />
   <event time='9:47 min' type='25' value='1703951' name='gaschange' cylinder='0' o2='15.0%' he='26.0%' />
   <event time='38:28 min' type='11' value='46' name='gaschange' cylinder='2' o2='46.0%' />
   <event time='54:08 min' type='11' value='100' name='gaschange' cylinder='3' o2='100.0%' />

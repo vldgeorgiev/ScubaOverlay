@@ -21,6 +21,7 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 
 ## ✨ Features
 
+### Computer Data Overlay
 - **Multiple dive log formats** — Subsurface (.ssrf) and Shearwater XML
 - **Flexible backgrounds** — solid color or PNG with transparency  
 - **Chroma key–friendly** background color (default bright green `#00FF00`)  
@@ -33,7 +34,16 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 - **Quick layout testing** — render a single PNG before committing to a video  
 - **Multiple tank pressures** via indexed fields (`pressure[0]`, `pressure[1]`, …)  
 - **Fallback values** for missing data  
-- **Simple YAML configuration** — no code changes required for layout tweaks  
+- **Simple YAML configuration** — no code changes required for layout tweaks
+
+### Dive Profile Graph Overlay
+- **Visual depth profile** — graph showing depth over time with moving position indicator
+- **Independent overlay** — generate profile separately from computer data for flexible compositing
+- **Template-based styling** — customize colors, line thickness, indicator size via YAML
+- **Grid and axes** — optional grid lines, axis labels, and tick marks for reference
+- **Auto-scaling Y-axis** — automatically adjusts to dive's depth range
+- **Segment support** — works with video segment matching for partial dive overlays
+- **Unit conversion** — metric (meters) ↔ imperial (feet) depth scaling  
 
 ---
 
@@ -164,7 +174,9 @@ Not sure which Mac you have? Go to **Apple menu** → **About This Mac** and che
 
 ## 🛠 Quick Start
 
-### 1. Preview Your Layout
+### Computer Data Overlay
+
+#### 1. Preview Your Layout
 ```bash
 scuba-overlay --template templates/perdix-ai-oc-tech.yaml --test-template
 ```
@@ -172,7 +184,7 @@ Generates `test_template.png` for fast iteration.
 
 *Note: You can also use `python main.py` if you haven't installed the package.*
 
-### 2. Generate Overlay Video
+#### 2. Generate Overlay Video
 Metric units:
 ```bash
 scuba-overlay --template templates/perdix-ai-oc-tech.yaml --log samples/dive446.ssrf --output overlay.mp4
@@ -181,6 +193,38 @@ Imperial units:
 ```bash
 scuba-overlay --template templates/perdix-ai-oc-tech.yaml --log samples/dive446.ssrf --units imperial --output overlay_imperial.mp4
 ```
+
+### Dive Profile Graph Overlay
+
+#### 1. Preview Profile Template
+```bash
+scuba-overlay --profile-template templates/profile-simple.yaml --test-template
+```
+Generates `test_profile_template.png` with dummy dive data.
+
+#### 2. Generate Profile Overlay
+Metric units:
+```bash
+scuba-overlay --log samples/dive446.ssrf --profile-template templates/profile-simple.yaml --output profile.mp4
+```
+Imperial units (depth in feet):
+```bash
+scuba-overlay --log samples/dive446.ssrf --profile-template templates/profile-technical.yaml --units imperial --output profile_imperial.mp4
+```
+
+#### 3. Combine Computer and Profile Overlays
+Generate them separately and composite in your video editor:
+```bash
+# Generate computer overlay
+scuba-overlay --log dive.ssrf --template templates/perdix-ai-oc-tech.yaml --output computer.mp4
+
+# Generate profile overlay
+scuba-overlay --log dive.ssrf --profile-template templates/profile-simple.yaml --output profile.mp4
+
+# Import both into video editor, layer on top of footage, apply chroma key to each
+```
+
+**Note:** You cannot use `--template` and `--profile-template` together. They generate independent overlays for maximum compositing flexibility.
 
 ---
 
@@ -302,7 +346,8 @@ For detailed information, see **[Video Segment Matching Guide](docs/video-segmen
 
 | Option          | Description |
 |-----------------|-------------|
-| `--template`    | Path to YAML template (required) |
+| `--template`    | Path to YAML template for computer data overlay (mutually exclusive with `--profile-template`) |
+| `--profile-template` | Path to YAML template for dive profile graph overlay (mutually exclusive with `--template`) |
 | `--log`         | Dive log file (.ssrf or .xml) |
 | `--output`      | Output MP4 filename (default: `output_overlay.mp4`) |
 | `--match-video` | Video file to match for automatic segment extraction |
@@ -314,26 +359,37 @@ For detailed information, see **[Video Segment Matching Guide](docs/video-segmen
 
 ### Usage Modes
 
-**Full dive overlay:**
+**Computer data overlay:**
 ```bash
 scuba-overlay --template template.yaml --log dive.ssrf --output overlay.mp4
 ```
 
-**Automatic segment matching:**
+**Profile graph overlay:**
 ```bash
-scuba-overlay --template template.yaml --log dive.ssrf --match-video footage.mp4 --output segment.mp4
+scuba-overlay --profile-template profile.yaml --log dive.ssrf --output profile.mp4
 ```
 
-**Manual segment:**
+**Automatic segment matching (works with both overlay types):**
+```bash
+scuba-overlay --template template.yaml --log dive.ssrf --match-video footage.mp4 --output segment.mp4
+scuba-overlay --profile-template profile.yaml --log dive.ssrf --match-video footage.mp4 --output profile_segment.mp4
+```
+
+**Manual segment (works with both overlay types):**
 ```bash
 scuba-overlay --template template.yaml --log dive.ssrf --start 300 --duration 120 --output segment.mp4
+scuba-overlay --profile-template profile.yaml --log dive.ssrf --start 300 --duration 120 --output profile_segment.mp4
 ```
 
 ---
 
 ## 🖌 Creating & Editing Templates
 
-Templates are YAML files that define the visual layout and data fields for your overlay. The template system supports:
+Templates are YAML files that define the visual layout and data fields for your overlays.
+
+### Computer Data Templates
+
+The template system supports:
 
 - **Multiple backgrounds** (solid color, PNG images, chroma key transparency)
 - **Custom fonts** with size, color, and positioning control
@@ -343,12 +399,31 @@ Templates are YAML files that define the visual layout and data fields for your 
 - **Precision control** for numeric displays
 
 For **complete template documentation** with examples and field reference, see:  
-📖 **[Template System Guide](docs/template-guide.md)**
+📖 **[Computer Data Template Guide](docs/template-guide.md)**
+
+### Profile Graph Templates
+
+Profile templates control the appearance of dive profile graph overlays:
+
+- **Graph positioning** and dimensions
+- **Profile line** color and thickness
+- **Position indicator** color and size
+- **Background color** (solid or chroma key)
+- **Auto-scaling depth axis** with padding
+
+For **complete profile template documentation** with examples, see:  
+📖 **[Profile Template Guide](docs/profile-template-guide.md)**
 
 ### Quick Template Testing
 
+**Computer data template:**
 ```bash
 scuba-overlay --template your_template.yaml --test-template
+```
+
+**Profile template:**
+```bash
+scuba-overlay --profile-template your_profile.yaml --test-template
 ```
 
 This generates a single PNG preview so you can iterate on your layout quickly.
@@ -367,7 +442,7 @@ This generates a single PNG preview so you can iterate on your layout quickly.
 
 - Support for Garmin and other dive computer formats  
 - PPO2 calculation  
-- Dive profile graph overlay  
+- ✅ ~~Dive profile graph overlay~~ (completed)  
 
 ---
 

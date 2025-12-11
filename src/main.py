@@ -2,6 +2,7 @@ import argparse
 from parser import parse_dive_log, DiveLogError, extract_dive_segment
 from template import load_template, TemplateError
 from overlay import generate_overlay_video, generate_test_template_image
+from profile_graph import generate_profile_overlay_video, generate_test_profile_image
 from video_metadata import extract_video_metadata, detect_timezone_offset
 from video_segment_errors import (
     VideoSegmentError, VideoReadError, VideoMetadataError,
@@ -11,7 +12,8 @@ from datetime import timedelta
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--template", required=True, help="YAML layout template file")
+    parser.add_argument("--template", required=False, help="YAML layout template file for computer overlay")
+    parser.add_argument("--profile-template", required=False, help="YAML template file for profile graph overlay")
     parser.add_argument("--log", required=False, help="Dive log file (e.g. .ssrf)")
     parser.add_argument("--output", required=False, default="output_overlay.mp4", help="Output overlay video file (e.g. overlay.mp4)")
     parser.add_argument("--duration", type=int, default=None, help="Duration in seconds. For full dive if not in segment mode, or segment duration with --start")
@@ -21,6 +23,13 @@ def main():
     parser.add_argument("--match-video", help="Video file to match for automatic segment extraction")
     parser.add_argument("--start", type=int, help="Manual segment start time in seconds from dive start")
     args = parser.parse_args()
+
+    # Validate template arguments
+    if not args.template and not args.profile_template:
+        parser.error("Either --template or --profile-template is required")
+
+    if args.template and args.profile_template:
+        parser.error("Cannot use --template and --profile-template together. Generate overlays separately and composite in your video editor.")
 
     if not args.test_template and not args.log:
         parser.error("--log is required unless --test-template is used")
@@ -38,10 +47,18 @@ def main():
     # Test template shortcut
     if args.test_template:
         try:
-            template = load_template(args.template)
-            print("Generating test template image...")
-            generate_test_template_image(template, "test_template.png", units_override=units_override)
-            print("✅ Test template image saved as test_template.png")
+            if args.profile_template:
+                # Test profile template
+                template = load_template(args.profile_template)
+                print("Generating test profile template image...")
+                generate_test_profile_image(template, "test_profile_template.png", units_override=units_override)
+                print("✅ Test profile template image saved as test_profile_template.png")
+            else:
+                # Test computer overlay template
+                template = load_template(args.template)
+                print("Generating test template image...")
+                generate_test_template_image(template, "test_template.png", units_override=units_override)
+                print("✅ Test template image saved as test_template.png")
         except TemplateError as e:
             print(f"❌ Error: {e}")
         except Exception as e:
@@ -159,7 +176,12 @@ def main():
 
     # Load template
     try:
-        template = load_template(args.template)
+        if args.profile_template:
+            template = load_template(args.profile_template)
+            template_type = "profile"
+        else:
+            template = load_template(args.template)
+            template_type = "computer"
     except TemplateError as e:
         print(f"❌ Error: {e}")
         return
@@ -180,14 +202,20 @@ def main():
     else:
         duration = int(dive_samples[-1].time) + 1
 
-    print(f"Generating overlay video: {args.output}")
+    overlay_type = "profile graph" if template_type == "profile" else "computer"
+    print(f"Generating {overlay_type} overlay video: {args.output}")
     print(f" - Resolution: {resolution[0]}x{resolution[1]}")
     print(f" - Duration: {duration}s (fps={args.fps})")
     if units_override:
         print(f" - Units: {args.units} -> {units_override}")
 
     try:
-        generate_overlay_video(dive_samples, template, args.output, resolution=resolution, duration=duration, fps=args.fps, units_override=units_override, time_offset=time_offset)
+        if template_type == "profile":
+            # For profile graphs, always render full dive profile even when generating segment video
+            full_samples = dive_data.samples
+            generate_profile_overlay_video(full_samples, template, args.output, resolution=resolution, duration=duration, fps=args.fps, units_override=units_override, time_offset=time_offset, segment_samples=dive_samples if time_offset > 0 else None)
+        else:
+            generate_overlay_video(dive_samples, template, args.output, resolution=resolution, duration=duration, fps=args.fps, units_override=units_override, time_offset=time_offset)
         print(f"✅ Done. Overlay video saved to: {args.output}")
     except Exception as e:
         print(f"❌ Error generating overlay video: {e}")

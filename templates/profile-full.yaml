@@ -1,0 +1,77 @@
+# Full Configuration Profile Template
+# Complete example showing all available configuration options with documentation
+
+# Template identifier (optional, for reference)
+template_name: profile-full-config
+
+# Frame dimensions (required)
+# These define the size of the output video frame
+width: 800
+height: 300
+
+# Background color (required)
+# Hex color code for the background
+# Use #00FF00 (bright green) for chroma key transparency in video editors
+# Use any other color for opaque backgrounds (e.g., #1a1a1a for dark gray)
+background_color: "#1a1a1a"
+
+# Graph configuration (required)
+graph:
+  # Graph position within the frame (required)
+  # Top-left corner coordinates in pixels
+  position: { x: 50, y: 40 }
+
+  # Graph area dimensions (required)
+  # Width and height of the actual graph plotting area in pixels
+  # Must fit within the frame dimensions defined above
+  width: 700
+  height: 220
+
+  # Profile line configuration (required)
+  # Controls the appearance of the depth profile line
+  line:
+    # Line color (required)
+    # Hex color code for the profile line
+    color: "#00D4FF"
+
+    # Line thickness (required)
+    # Width of the line in pixels
+    # Typical range: 2-5 pixels
+    thickness: 4
+
+  # Position indicator configuration (required)
+  # Controls the moving dot that shows current position in the dive
+  indicator:
+    # Indicator color (required)
+    # Hex color code for the position indicator dot
+    color: "#FF4500"
+
+    # Indicator size (required)
+    # Radius of the circular indicator in pixels
+    # Typical range: 8-15 pixels
+    size: 12
+
+  # Grid and axes configuration (optional)
+  # Grid lines, axis labels, and tick marks
+  axes:
+    show_grid: true
+    grid_color: "#444444"
+    grid_thickness: 1
+    grid_interval: { time: 300, depth: 10 }  # Grid every 300s (5 min), 10m
+
+    depth_axis:
+      label: "Depth (m)"
+      label_font: { name: "Arial", size: 18, color: "#FFFFFF" }
+      label_position: "left"    # "left" or "right"
+      show_ticks: true
+      tick_interval: 10         # Tick every 10m (or ft if imperial)
+      tick_color: "#FFFFFF"
+
+    time_axis:
+      label: "Time"
+      label_font: { name: "Arial", size: 14, color: "#FFFFFF" }
+      label_position: "bottom"  # "top" or "bottom"
+      show_ticks: true
+      tick_interval: 300        # Tick every 300 seconds (5 minutes)
+      tick_format: "mm"      # "mm:ss", "mm", or "seconds"
+      tick_color: "#FFFFFF"

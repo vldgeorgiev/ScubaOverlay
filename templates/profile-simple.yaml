@@ -1,0 +1,20 @@
+# Simple Profile Template
+# Minimal dive profile graph with clean design
+
+template_name: profile-simple
+width: 800
+height: 300
+background_color: "#00FF00"  # Chroma green for transparency
+
+graph:
+  position: { x: 25, y: 25 }
+  width: 750
+  height: 250
+
+  line:
+    color: "#00AAFF"  # Bright blue
+    thickness: 3
+
+  indicator:
+    color: "#FF0000"  # Red dot
+    size: 10

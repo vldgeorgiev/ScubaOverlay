@@ -59,6 +59,9 @@ A cross-platform Python tool that generates a **chroma key–ready dive computer
 - Sample overlay frame:  
 ![Overlay Frame Example](docs/sample-overlay-frame.png)
 
+- Sample profile overlay:  
+![Overlay Frame Example](docs/sample-profile-full.png)
+
 ---
 
 ## 🚀 Installation

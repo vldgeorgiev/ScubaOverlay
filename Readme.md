@@ -361,6 +361,7 @@ For detailed information, see **[Video Segment Matching Guide](docs/video-segmen
 | `--fps`         | Frames per second (default: 10) |
 | `--test-template` | Generate single PNG and exit |
 | `--units`       | `metric` or `imperial` (default: metric) |
+| `--shearwater-date-format` | Override date format for Shearwater XML files (e.g., `%m/%d/%Y %I:%M:%S %p`) |
 
 ### Usage Modes
 
@@ -440,6 +441,11 @@ This generates a single PNG preview so you can iterate on your layout quickly.
 - **Green background visible** — check chroma key matches exactly `#00FF00`.  
 - **No data appears** — verify the log file has values and matches expected format.  
 - **Render too slow** — lower `--fps`.  
+- **Shearwater date parsing error** — Shearwater XML files use regional date formats. The parser automatically detects the format based on your system locale. If parsing fails with an error like `Could not parse dive start date`, use the `--shearwater-date-format` option to specify the correct format:
+  - **US format** (M/D/Y with 12-hour time): `--shearwater-date-format "%m/%d/%Y %I:%M:%S %p"`
+  - **EU format** (D/M/Y with 24-hour time): `--shearwater-date-format "%d/%m/%Y %H:%M:%S"`
+  - **German format**: `--shearwater-date-format "%d.%m.%Y %H:%M:%S"`
+  - See [Python's strptime documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes) for more format codes.
 
 ---
 

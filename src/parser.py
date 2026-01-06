@@ -5,6 +5,7 @@ from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 import copy
+import locale
 from video_segment_errors import SegmentOutOfBoundsError, EmptySegmentError
 
 
@@ -228,7 +229,7 @@ class SubsurfaceParser(DiveParser):
                 last_values.stop_time = int(attrs["stoptime"].replace(" min", "").split(":")[0])
             if "dc_supplied_ppo2" in attrs:
                 last_values.ppo2 = float(attrs["dc_supplied_ppo2"].replace(" bar", ""))
-            
+
             # Update PPO2 sensors
             for i in range(3):  # Typically 3 sensors for CCR
                 key = f"sensor{i+1}"
@@ -305,6 +306,16 @@ class SubsurfaceParser(DiveParser):
 class ShearwaterParser(DiveParser):
     """Parser for Shearwater XML dive logs."""
 
+    def __init__(self, date_format: Optional[str] = None):
+        """Initialize parser with optional date format override.
+
+        Args:
+            date_format: Optional strptime format string to override regional format detection.
+                        Example: "%m/%d/%Y %I:%M:%S %p" for US format
+                        Example: "%d/%m/%Y %H:%M:%S" for EU format
+        """
+        self.date_format = date_format
+
     def parse(self, file_path: str) -> DiveData:
         # Handle encoding issues with Shearwater XML files
         try:
@@ -328,12 +339,29 @@ class ShearwaterParser(DiveParser):
         if start_date_elem is None or not start_date_elem.text:
             raise NoDiveDataError("Dive start date not found in dive log")
 
-        # Parse Shearwater date format: "4/6/2024 11:58:49 AM"
+        if self.date_format:
+            # Use user-provided format override
+            format_string = self.date_format
+            print(f"Using custom date format: {format_string}")
+        else:
+            # Get format from system locale
+            format_string = self._get_regional_date_format()
+            print(f"Using regional date format: {format_string}")
+
         try:
-            start_time = datetime.strptime(start_date_elem.text, "%m/%d/%Y %I:%M:%S %p")
+            start_time = datetime.strptime(start_date_elem.text, format_string)
             start_time = start_time.replace(tzinfo=timezone.utc)
         except ValueError as e:
-            raise NoDiveDataError(f"Could not parse dive start date: {e}")
+            raise NoDiveDataError(
+                f"Could not parse dive start date '{start_date_elem.text}' with format '{format_string}': {e}\n"
+                f"The parser uses your system's regional format, but the Shearwater file may use a different format.\n"
+                f"Use --shearwater-date-format to specify the correct format.\n"
+                f"Common formats:\n"
+                f"  US (12-hour):  --shearwater-date-format '%m/%d/%Y %I:%M:%S %p'  (e.g., 8/15/2024 4:57:48 PM)\n"
+                f"  US (24-hour):  --shearwater-date-format '%m/%d/%Y %H:%M:%S'     (e.g., 8/15/2024 16:57:48)\n"
+                f"  EU (12-hour):  --shearwater-date-format '%d/%m/%Y %I:%M:%S %p'  (e.g., 15/8/2024 4:57:48 PM)\n"
+                f"  EU (24-hour):  --shearwater-date-format '%d/%m/%Y %H:%M:%S'     (e.g., 15/8/2024 16:57:48)"
+            )
 
         # Find dive log records
         dive_records = root.findall(".//diveLogRecords/diveLogRecord")
@@ -452,16 +480,56 @@ class ShearwaterParser(DiveParser):
             end_time=end_time
         )
 
+    def _get_regional_date_format(self) -> str:
+        """Get date format based on system locale.
 
-# Parser registry
-PARSER_REGISTRY = {
-    ".ssrf": SubsurfaceParser(),
-    ".xml": ShearwaterParser(),
-}
+        Returns:
+            strptime format string based on system locale
+        """
+        locale.setlocale(locale.LC_TIME, '')
+
+        # Get locale's date and time format
+        date_format = locale.nl_langinfo(locale.D_FMT)  # Date format like %m/%d/%Y or %d/%m/%Y
+        time_format = locale.nl_langinfo(locale.T_FMT)  # Time format like %H:%M:%S or %I:%M:%S %p
+
+        # Combine date and time formats
+        return f"{date_format} {time_format}"
 
 
-def parse_dive_log(file_path: str) -> DiveData:
-    for ext, parser in PARSER_REGISTRY.items():
-        if file_path.lower().endswith(ext):
-            return parser.parse(file_path)
-    raise UnsupportedFormatError(file_path)
+def get_parser(file_path: str, shearwater_date_format: Optional[str] = None) -> DiveParser:
+    """Get appropriate parser for the given file.
+
+    Args:
+        file_path: Path to the dive log file
+        shearwater_date_format: Optional date format override for Shearwater XML files
+
+    Returns:
+        Parser instance configured for the file type
+
+    Raises:
+        UnsupportedFormatError: If file format is not supported
+    """
+    if file_path.lower().endswith(".ssrf"):
+        return SubsurfaceParser()
+    elif file_path.lower().endswith(".xml"):
+        return ShearwaterParser(date_format=shearwater_date_format)
+    else:
+        raise UnsupportedFormatError(file_path)
+
+
+def parse_dive_log(file_path: str, shearwater_date_format: Optional[str] = None) -> DiveData:
+    """Parse a dive log file.
+
+    Args:
+        file_path: Path to the dive log file
+        shearwater_date_format: Optional date format override for Shearwater XML files
+
+    Returns:
+        Parsed dive data
+
+    Raises:
+        UnsupportedFormatError: If file format is not supported
+        DiveLogError: If there are issues parsing the dive log
+    """
+    parser = get_parser(file_path, shearwater_date_format)
+    return parser.parse(file_path)

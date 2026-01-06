@@ -40,7 +40,8 @@ The project aims to support multiple dive log formats (Subsurface .ssrf and Shea
 ### Architecture Patterns
 
 - **Parser pattern**: Abstract base class (`DiveParser`) with format-specific implementations (`SubsurfaceParser`, `ShearwaterParser`)
-- **Factory pattern**: `parse_dive_log()` dispatches to appropriate parser based on file extension
+  - `ShearwaterParser` accepts optional `date_format` parameter for regional date format overrides
+- **Factory pattern**: `get_parser()` dispatches to appropriate parser based on file extension and configuration
 - **Separation of concerns**: Clear module boundaries:
   - `parser.py` - dive log parsing and data extraction
   - `template.py` - YAML template loading
@@ -87,7 +88,12 @@ The project aims to support multiple dive log formats (Subsurface .ssrf and Shea
 ### Dive Log Formats
 
 - **Subsurface (.ssrf)**: XML format from popular open-source dive log software
+  - Uses ISO 8601 date format: `YYYY-MM-DD HH:MM:SS`
 - **Shearwater (.xml)**: XML format from Shearwater dive computers (Perdix, Teric, etc.)
+  - Uses regional date/time formats that vary by dive computer settings
+  - Parser automatically uses system locale for date/time parsing
+  - Common formats: `M/D/Y h:mm:ss AM/PM` (US), `D/M/Y HH:mm:ss` (EU)
+  - Manual override available via `--shearwater-date-format` CLI parameter
 - Data stored in metric units internally (meters, bar, Celsius)
 
 ### Video Production Context

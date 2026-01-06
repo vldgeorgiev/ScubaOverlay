@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--units", choices=["metric", "imperial"], help="Override all display units (metric or imperial)")
     parser.add_argument("--match-video", help="Video file to match for automatic segment extraction")
     parser.add_argument("--start", type=int, help="Manual segment start time in seconds from dive start")
+    parser.add_argument("--shearwater-date-format", help="Override date format for Shearwater XML files (e.g., '%%m/%%d/%%Y %%I:%%M:%%S %%p' for US format)")
     args = parser.parse_args()
 
     # Validate template arguments
@@ -68,7 +69,7 @@ def main():
 
     # Parse dive log
     try:
-        dive_data = parse_dive_log(args.log)
+        dive_data = parse_dive_log(args.log, shearwater_date_format=args.shearwater_date_format)
         if not dive_data.samples:
             print("❌ No dive data parsed. Exiting.")
             return
